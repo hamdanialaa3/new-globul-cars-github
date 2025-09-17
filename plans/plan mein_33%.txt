@@ -1,0 +1,715 @@
+الخطة التنفيذية المتكاملة: من الفكرة إلى الهيمنة على السوق لمنصة mobilebg.eu
+الجزء الأول: الأساس الاستراتيجي والمعماري
+يضع هذا الجزء الأولي من المخطط "النجم القطبي" للمشروع. إنه يوحد الطموحات التجارية عالية المستوى مع القرارات التقنية التأسيسية، مما يضمن أن كل سطر من التعليمات البرمجية اللاحقة يُكتب لغرض واضح وموحد.
+
+القسم 1: الرؤية الموحدة: من سوق إلكتروني إلى نظام بيئي متكامل للسيارات
+بيان المهمة
+بناء وتشغيل سوق السيارات الأكثر موثوقية وابتكارًا وتمركزًا حول المستخدم في بلغاريا، مع خارطة طريق استراتيجية للتوسع في منطقة البلقان الأوسع. ستعمل المنصة، mobilebg.eu، حصريًا بعملة اليورو وستخدم المستخدمين الناطقين باللغتين البلغارية والإنجليزية على حد سواء.   
+
+الاستراتيجية الأساسية - "خطة القمة"
+يفصل هذا القسم الاستراتيجية التجارية الشاملة التي تم تجميعها من الوثائق المقدمة. تتجاوز هذه الاستراتيجية مجرد إنشاء موقع إلكتروني للإعلانات المبوبة لتصل إلى هندسة    
+
+نظام بيئي متكامل للسيارات. إن السمة الأساسية المستخلصة من جميع الوثائق ليست المنافسة فحسب، بل الهيمنة من خلال التفوق التكنولوجي والسيطرة على دورة حياة السيارة بأكملها. تشير الخطط المتعددة المقدمة، من قوائم الميزات الأساسية إلى "خطة القمة" الطموحة، إلى رغبة في مشروع يبدأ كمنافس قوي ولكنه يمتلك مسارًا واضحًا ليصبح أداة لا غنى عنها. لذلك، يجب أن تكون خطة التنفيذ معيارية، مما يسمح بإطلاق منتج قابل للتطبيق بحد أدنى (MVP) قوي، مع هندسة تدعم ميزات النظام البيئي المستقبلية مثل التمويل والتأمين وخدمات B2B دون الحاجة إلى إعادة بناء كاملة. هذه الرؤية الاستراتيجية هي العامل الأكثر أهمية للنجاح.
+
+عرض القيمة الفريد (UVP)
+فيما يلي تفصيل للميزات التنافسية الرئيسية للمنصة لكل شريحة من المستخدمين:
+
+للمشترين: ثقة لا مثيل لها (التحقق من البائعين، الدفع بالضمان)، شفافية الأسعار القائمة على البيانات (مُقيّم الذكاء الاصطناعي)، وتجربة اكتشاف مخصصة للغاية.   
+
+للبائعين (الأفراد والتجار): عملية إدراج إعلانات سلسة معززة بتوليد المحتوى بالذكاء الاصطناعي، أدوات تحليلية قوية لتحسين المبيعات، والوصول إلى سوق من المشترين ذوي النية العالية.   
+
+القسم 2: المعمارية التقنية النهائية
+يعمل هذا القسم كمرجع تقني رئيسي، حيث يوحد جميع القرارات المعمارية من الملفات المصدر  في مواصفات نهائية وموحدة.   
+
+معمارية الخدمات المصغرة (Microservices)
+إن اختيار معمارية الخدمات المصغرة هو نتيجة مباشرة لتعقيد المشروع. فتطبيق متجانس (Monolithic) سينهار تحت وطأة المهام المتباينة والمستهلكة للموارد مثل الإشعارات في الوقت الفعلي، وخدمة نماذج الذكاء الاصطناعي، وسحب البيانات. تؤكد الوثائق على وجود خدمات متعددة مثل user-service و listing-service و ai-assistant-service، بالإضافة إلى خدمة منفصلة قائمة على Python لتقييم المركبات. هذا يؤكد الالتزام الاستراتيجي بفصل الاهتمامات. ستتعامل خدمات Node.js مع المهام عالية الإنتاجية والمرتبطة بالمدخلات/المخرجات (ملفات تعريف المستخدمين، الإعلانات)، بينما ستدير خدمات Python المهام المتخصصة والمستهلكة لوحدة المعالجة المركزية (نماذج التعلم الآلي، تحليل البيانات). هذا الفصل هو ممارسة فضلى تضمن الأداء الأمثل والقابلية للتوسع لكل مكون.   
+
+منصة Google Cloud و Firebase
+نظرة شاملة على إعداد مشروع GCP/Firebase (Globul Auto platform ، معرف المشروع Globul Auto platform) كما هو محدد. يتضمن ذلك تكوين خدمات المصادقة، Firestore، التخزين السحابي، الدوال السحابية، و Cloud Run. سيتم دمج أفضل الممارسات لإعداد المشاريع من الأبحاث الخارجية.   
+
+استراتيجية المستودعات المتعددة على GitHub
+تعريف واضح لهيكل المستودعات تحت حساب hamdanialaa5 ، كما هو محدد ، حيث توجد كل خدمة مصغرة في مستودعها الخاص لتسهيل التطوير المستقل وخطوط أنابيب النشر.   
+
+أتمتة CI/CD مع GitHub Actions
+خطة مفصلة لإعداد تدفقات عمل مؤتمتة للبناء والاختبار والنشر (.github/workflows/deploy.yml) لكل من واجهة Vue.js الأمامية إلى Firebase Hosting والخدمات المصغرة الخلفية إلى Cloud Run، مع الإشارة إلى أفضل الممارسات.   
+
+الجدول 1: الحزمة التقنية النهائية
+يقدم هذا الجدول الحيوي رؤية واحدة وموثوقة لجميع التقنيات التي سيتم استخدامها. فهو يزيل الغموض لفريق التطوير ويعمل كعقد للتنفيذ التقني، مما يضمن الاتساق ويمنع الانحراف المعماري.
+
+الفئة	التقنية/الخدمة	الغرض والأساس المنطقي
+الواجهة الأمامية	Vue 3 (Composition API), TypeScript, Vite, Pinia, Vue Router, TailwindCSS	تطوير واجهة أمامية حديثة، عالية الأداء، وقابلة للتطوير مع سلامة الأنواع وإدارة فعالة للحالة.
+الخلفية الأساسية	Node.js, TypeScript, Express.js	لبناء خدمات مصغرة فعالة ومكثفة في عمليات الإدخال/الإخراج (المستخدم، الإعلانات، المدفوعات).
+الخلفية للذكاء الاصطناعي والبيانات	Python, FastAPI	للخدمات المصغرة المتخصصة والمكثفة في استخدام وحدة المعالجة المركزية (البحث، المساعد الذكي، مغناطيس البيانات، مقيّم المركبات). يوفر FastAPI أداءً عاليًا.
+قاعدة البيانات	Google Firestore	قاعدة بيانات NoSQL أساسية للبيانات في الوقت الفعلي، ملفات تعريف المستخدمين، الإعلانات، وحالة التطبيق.
+المصادقة	Firebase Authentication	مصادقة آمنة ومُدارة تدعم البريد الإلكتر الإلكتروني/كلمة المرور و Google OAuth.
+تخزين الملفات	Google Cloud Storage for Firebase	تخزين قابل للتطوير وآمن لجميع المحتويات التي ينشئها المستخدمون (صور المركبات، شعارات البائعين).
+محرك البحث	Elasticsearch	لقدرات بحث متقدمة وعالية الأداء، بما في ذلك البحث متعدد الأوجه والتعلم للترتيب (LTR).
+الحوسبة بدون خادم	Google Cloud Functions, Google Cloud Run	Cloud Functions للمهام القائمة على الأحداث (مشغلات قاعدة البيانات، الإشعارات). Cloud Run للخدمات المصغرة المعبأة في حاويات.
+الاستضافة	Firebase Hosting	شبكة توصيل محتوى عالمية (CDN)، شهادة SSL مؤتمتة، وتكامل سلس لواجهة Vue.js الأمامية على نطاق mobilebg.eu.
+التدويل	vue-i18n	مكتبة قوية للتعامل مع المحتوى ثنائي اللغة (BG/EN) والتعريب.
+المدفوعات	Stripe (Connect for Marketplaces)	
+بوابة دفع عالمية مع دعم قوي لنماذج الأسواق، والمدفوعات متعددة الأطراف، ومعاملات اليورو في أوروبا.   
+
+CI/CD	GitHub Actions	أتمتة أصلية ومتكاملة مع المستودع لبناء واختبار ونشر جميع الخدمات.
+المراقبة	Google Cloud Operations (Logging, Monitoring, Alerts)	مجموعة شاملة لمراقبة صحة التطبيق وأدائه وتتبع الأخطاء.
+الجزء الثاني: خارطة طريق التنفيذ المرحلية (0% - 100%)
+هذا هو القلب التشغيلي للمخطط. إنه يقسم المشروع بأكمله إلى تسلسل منطقي من الخطوات المرقمة وذات الأولوية. تمثل كل خطوة كتلة عمل ملموسة، تبلغ ذروتها في منصة كاملة الميزات وجاهزة للإنتاج.
+
+الجدول 2: ملخص التنفيذ المرحلي
+يقدم هذا الجدول خارطة طريق استراتيجية لأصحاب المصلحة ومديري المشاريع وقادة الفرق. إنه يحدد بوضوح المخرجات والأهداف لكل مرحلة رئيسية، مما يسمح بتتبع التقدم الفعال ومواءمة التوقعات. إنه يجيب على سؤال "ماذا سنمتلك، ومتى؟"
+
+المرحلة	الخطوات المشمولة	الإنجاز المستهدف	المخرجات الرئيسية	مقاييس النجاح الأولية
+1. البنية التحتية والخدمات الأساسية	1 - 3	33%	CI/CD مؤتمت، مصادقة مستخدم آمنة، ملفات تعريف بائعين متقدمة، خدمة إعلانات سيارات أساسية.	نشر ناجح من فرع main، يمكن للمستخدم التسجيل وإنشاء إعلان أساسي عبر API.
+2. السوق الذكي (MVP)	4 - 6	66%	واجهة أمامية Vue.js تعمل بكامل طاقتها، بحث Elasticsearch عالي الأداء، نظام ترجمة ثنائي اللغة مؤتمت.	يمكن للمستخدم البحث وعرض وفهم الإعلانات باللغتين BG/EN. زمن استجابة البحث أقل من 200ms.
+3. الذكاء المتقدم والتسويق التجاري	7 - 11	100%	سحب البيانات، أدوات إعلانات الذكاء الاصطناعي، مقيّم أسعار المركبات، المساعد الاستباقي، بوابة الدفع، واجهة المالك الذكية.	منصة جاهزة للإطلاق مع جميع الميزات تعمل. معاملة دفع اختبارية ناجحة. يتم توليد رؤى الذكاء الاصطناعي.
+
+التصدير إلى "جداول بيانات Google"
+المرحلة 1: البنية التحتية والخدمات الأساسية (إنجاز المشروع: 0% ← 33%)
+الخطوة 1: هيكلة المشروع، DevOps، وأتمتة CI/CD (الإنجاز: 10%)
+الهدف: إنشاء أساس متين ومؤتمت للمشروع بأكمله.
+
+المهام:
+
+تهيئة هيكل المستودعات المتعددة على GitHub (bg-cars-platform-frontend, user-service, إلخ) تحت حساب hamdanialaa5 .
+
+تكوين مشروع Firebase Globul Auto platform ، وتفعيل جميع الخدمات المطلوبة، وتعبئة ملف src/services/firebase/config.ts بمفاتيح API والمعرفات الصحيحة.   
+
+تنفيذ خط أنابيب CI/CD في .github/workflows/deploy.yml. سيقوم هذا التدفق بأتمتة نشر تطبيق Vue.js إلى Firebase Hosting والخدمات المصغرة Node.js/Python إلى Cloud Run عند الدمج في فرع main.
+
+تكوين نطاق mobilebg.eu على Firebase Hosting وضمان توفير شهادة SSL.
+
+إن أتمتة النشر من اليوم الأول هي ممارسة حيوية. فهي تقضي على الأخطاء اليدوية، وتضمن عملية إصدار متسقة، وتزيد بشكل كبير من سرعة التطوير. إنها تحول النشر من حدث عالي المخاطر إلى عملية روتينية ومنخفضة التوتر.
+
+الخطوة 2: خدمة مصادقة المستخدمين وملفات تعريف البائعين المتقدمة (الإنجاز: 20%)
+الهدف: بناء النظام الذي يدير هوية المستخدم والأدوار وبيانات البائعين المحترفين.
+
+المهام:
+
+تطوير user-service (Node.js/Express) مع نقاط نهاية لتسجيل المستخدمين وإدارة الملفات الشخصية.
+
+تنفيذ معالجة آمنة للرموز. ستتلقى الواجهة الأمامية idToken من Firebase Auth، والذي يتم إرساله إلى الخلفية. ستقوم user-service بالتحقق من هذا الرمز باستخدام Firebase Admin SDK لمصادقة الطلبات.   
+
+تعريف وتنفيذ مخططات Firestore لمجموعتي users و sellers، مع دمج النماذج من  و. يتضمن ذلك حقولًا لحالة التحقق والتقييمات وتفاصيل العمل.   
+
+تنفيذ منطق لـ Firebase Custom Claims لتعيين أدوار admin أو dealer، والتي سيتم استخدامها للتفويض في جميع أنحاء المنصة.
+
+الخطوة 3: خدمة إعلانات المركبات ونمذجة البيانات الأساسية (الإنجاز: 33%)
+الهدف: إنشاء الخدمة الأساسية المسؤولة عن دورة حياة إعلان السيارة بالكامل.
+
+المهام:
+
+تطوير listing-service (Node.js/Express) مع نقاط نهاية CRUD (إنشاء، قراءة، تحديث، حذف) كاملة لإعلانات المركبات.
+
+تنفيذ تدفق تحميل الصور: يقوم العميل بالتحميل إلى الخدمة، التي تعالج الصور (مثل إنشاء الصور المصغرة) ثم تحملها إلى Cloud Storage، وتعيد عناوين URL النهائية ليتم تخزينها في مستند الإعلان.
+
+وضع اللمسات الأخيرة على مخطط Firestore الشامل لمجموعة listings، مع دمج جميع الحقول المطلوبة من  و  (مثل    
+
+make, model, price, currency: "EUR", الأوصاف ثنائية اللغة, features, location, stats).
+
+تنفيذ قواعد أمان Firestore صارمة لضمان أن مالك الإعلان فقط (أو المسؤول) يمكنه تعديله أو حذفه.
+
+المرحلة 2: السوق الذكي (MVP) (إنجاز المشروع: 34% ← 66%)
+الخطوة 4: هيكل التطبيق الأمامي، نظام التصميم، وواجهة المستخدم الأساسية (الإنجاز: 45%)
+الهدف: بناء التطبيق المواجه للمستخدم، وتنفيذ الصفحات الأساسية ونظام تصميم احترافي ومتسق.
+
+المهام:
+
+هيكلة frontend-app باستخدام Vite, Vue 3, TypeScript, Pinia, و Vue Router.
+
+تنفيذ نظام التصميم العالمي المستوحى من mobile.de (نظيف، احترافي، مع لون أخضر أساسي) في src/styles/global.css وكتكوينات لـ TailwindCSS.
+
+بناء مكونات التخطيط الأساسية (MainNavbar.vue, MainFooter.vue) وعروض الصفحات (HomePage.vue, ListingDetails.vue, LoginPage.vue).
+
+تطوير مكون AddCarWizard.vue متعدد الخطوات، مما يوفر تجربة سلسة للبائعين لإنشاء الإعلانات.
+
+بناء مكون SellerProfile.vue لعرض البيانات الغنية من مجموعة sellers.
+
+الخطوة 5: محرك بحث عالي الأداء مع Elasticsearch (الإنجاز: 55%)
+الهدف: تنفيذ تجربة بحث سريعة وذات صلة وقابلة للتطوير، وهي ركيزة أساسية في عرض القيمة الفريد للمنصة.
+
+المهام:
+
+توفير وتكوين مجموعة Elasticsearch (على سبيل المثال، عبر Elastic Cloud).
+
+إنشاء دالة سحابية (Cloud Function) تعمل كمشغل عند أي كتابة (onCreate, onUpdate) لمجموعة listings في Firestore. ستقوم هذه الدالة بتحويل بيانات المستند ودفعها إلى فهرس Elasticsearch، مما يضمن المزامنة في الوقت الفعلي.
+
+تطوير search-service (Python/FastAPI) الذي سيكشف عن نقطة نهاية /search.
+
+ستتلقى هذه الخدمة استعلامات البحث من الواجهة الأمامية، وتستعلم من Elasticsearch، وتطبق نموذج التعلم للترتيب (LTR) لإعادة ترتيب النتائج لتحقيق أقصى قدر من الصلة قبل إعادتها.
+
+دمج مكون AISearch.vue  في الواجهة الأمامية للتفاعل مع هذه الخدمة الجديدة.   
+
+إن قرار استخدام نمط المزامنة من Firestore إلى Elasticsearch أمر حاسم للأداء. فالاستعلام من Firestore لعمليات بحث معقدة ومتعددة المرشحات غير فعال ومكلف على نطاق واسع. تم تصميم Elasticsearch خصيصًا لهذه المهمة. المزامنة في الوقت الفعلي عبر دالة سحابية هي الصمغ المعماري الذي يجعل هذا ممكنًا دون المساس بحداثة البيانات.
+
+الخطوة 6: نظام الترجمة ثنائي اللغة المؤتمت (الإنجاز: 66%)
+الهدف: تنفيذ نظام الترجمة "بدون تدخل" والمدعوم بالذكاء الاصطناعي لجعل كل المحتوى الذي ينشئه المستخدمون متاحًا بسلاسة باللغتين البلغارية والإنجليزية.
+
+المهام:
+
+تنفيذ بنية التدويل (i18n) للواجهة الأمامية كما هو مفصل في. يتضمن ذلك إعداد    
+
+vue-i18n مع Pinia لإدارة الحالة (useLanguageStore) وإنشاء مكون LanguageSwitcher.vue قابل لإعادة الاستخدام. سيتم دمج أفضل الممارسات من.   
+
+تطوير ونشر دالة onListingWrite السحابية. سيتم تشغيل هذه الدالة كلما تمت إضافة أو تغيير وصف إعلان.   
+
+ستكتشف الدالة اللغة المصدر (description_bg أو description_en) وتستدعي Google Cloud Translation API لملء الحقل الآخر.
+
+بشكل حاسم، تنفيذ منطق "شرط الحماية" لمنع الحلقات اللانهائية (حيث يؤدي إجراء الكتابة الخاص بالدالة إلى إعادة تشغيلها).
+
+إدارة مفتاح Google Translation API بشكل آمن باستخدام Google Secret Manager، وفقًا لأفضل الممارسات.   
+
+المرحلة 3: الذكاء المتقدم والتسويق التجاري (إنجاز المشروع: 67% ← 100%)
+الخطوة 7: خدمة "مغناطيس البيانات" ومجموعة تحسين الإعلانات بالذكاء الاصطناعي (الإنجاز: 77%)
+الهدف: إثراء المنصة ببيانات خارجية وتوفير أدوات مدعومة بالذكاء الاصطناعي لتحسين جودة الإعلانات.
+
+المهام:
+
+تطوير data-magnet-service (Python) كمجموعة من الدوال السحابية المجدولة. ستقوم هذه الدوال بسحب البيانات من مواقع الأخبار البلغارية، وأدلة الأعمال، ومصادر أخرى لملء مجموعتي news_articles و companies_data في Firestore.
+
+سحب البيانات هو مهمة حساسة من الناحية القانونية والأخلاقية. يجب بناء الخدمة مع مراعاة أفضل الممارسات الأخلاقية: احترام    
+
+robots.txt، وتنظيم الطلبات لتجنب إرهاق الخوادم، واستخدام سلاسل وكيل مستخدم واضحة. سيكون التركيز على البيانات العامة وغير الشخصية لتقليل مخاطر الامتثال لـ GDPR.
+
+تطوير ai-assistant-service (Python/FastAPI) لكشف نقاط النهاية لـ "مجموعة تحسين الإعلانات بالذكاء الاصطناعي". وهذا يشمل:   
+
+/generate-description: نقطة نهاية تأخذ مواصفات السيارة وتستخدم نموذج لغوي كبير (LLM) لتوليد أوصاف جذابة (مستخدمة بالفعل في الخطوة 4).
+
+/analyze-image: نقطة نهاية تستخدم رؤية الكمبيوتر (مثل OpenCV) للتحقق من الضبابية أو الإضاءة السيئة في الصور المرفوعة وتقديم اقتراحات للبائع.
+
+الخطوة 8: وحدة مقيّم المركبات بالذكاء الاصطناعي (الإنجاز: 85%)
+الهدف: بناء أداة قوية قائمة على البيانات لتقديم تقديرات عادلة للقيمة السوقية للمركبات.
+
+المهام:
+
+تنفيذ الخدمة المصغرة الخلفية (vehicle-evaluation-service في Python/FastAPI) كما هو مفصل في  و.   
+
+ستقوم هذه الخدمة بتنسيق سحب البيانات من مواقع المنافسين (mobile.bg, olx.bg, Facebook Marketplace) للحصول على إعلانات قابلة للمقارنة. سيتم تطبيق أفضل الممارسات لسحب البيانات من هذه المنصات المحددة.   
+
+سيتم استخدام نموذج تعلم آلي (مثل Gradient Boosting Regressor أو Random Forest، مدرب على البيانات المسحوبة) للتنبؤ بالسعر. سيتم بناء النموذج باستخدام مكتبات Python مثل Scikit-learn و Pandas.   
+
+ستكشف الخدمة عن واجهة برمجة تطبيقات (API) تأخذ رقم تعريف المركبة (VIN) أو تفاصيلها وتعيد سعرًا تقديريًا ونطاق سعر و"درجة ثقة".
+
+تطوير مكون الواجهة الأمامية VehicleEvaluation.vue  لتفاعل المستخدم.   
+
+دمج عارض نماذج ثلاثي الأبعاد للمركبات المعروفة. يعد مكون الويب <model-viewer> خيارًا ممتازًا لهذا، لأنه سهل الدمج ويدعم النماذج ثلاثية الأبعاد التفاعلية والواقع المعزز (AR). بالنسبة لنماذج السيارات، يمكن أيضًا استخدام مكتبات مثل Three.js.   
+
+الخطوة 9: المساعد الذكي الاستباقي ومحرك التخصيص الفائق (الإنجاز: 92%)
+الهدف: تحويل تجربة المستخدم من تفاعلية إلى استباقية وشخصية بشكل فريد.
+
+المهام:
+
+تنفيذ نظام تتبع سلوك المستخدم. سيتم إرسال أحداث مثل VIEW_LISTING, SAVE_SEARCH, MESSAGE_SELLER من الواجهة الأمامية إلى مجموعة في Firestore أو موضوع Pub/Sub.
+
+تطوير proactive-assistant-service (Python) كما هو مفصل في. ستستمع هذه الخدمة إلى دفق أحداث سلوك المستخدم.   
+
+باستخدام مجموعة من القواعد المحددة مسبقًا (على سبيل المثال، "إذا شاهد المستخدم 3 سيارات من نفس الطراز ولم يتخذ أي إجراء")، ستقوم الخدمة بتوليد ودفع اقتراح إلى المستخدم في الوقت الفعلي (على سبيل المثال، عبر اتصال WebSocket أو مستمع Firestore).
+
+تطوير personalization-service (Python). بالنسبة للمستخدمين المصادق عليهم، ستقوم هذه الخدمة بتحليل سجل تفاعلهم الكامل لتوليد تخطيط ديناميكي للصفحة الرئيسية، يضم مكونات وإعلانات مصممة خصيصًا لاهتماماتهم المستنتجة (على سبيل المثال، "أودي A4 المضافة حديثًا"، "آخر الأخبار حول أودي"). يتطلب هذا بنية معالجة أحداث في الوقت الفعلي.   
+
+سيكون منطق التوصية مزيجًا من الترشيح القائم على المحتوى (التوصية بسيارات مماثلة) والترشيح التعاوني (التوصية بالسيارات التي أعجب بها مستخدمون مشابهون).   
+
+الخطوة 10: بوابة الدفع، أدوات البائع، وواجهة المالك الذكية "AI Cockpit" (الإنجاز: 98%)
+الهدف: وضع اللمسات الأخيرة على قنوات تحقيق الدخل وبناء لوحة تحكم نهائية لإدارة المنصة.
+
+المهام:
+
+دمج Stripe Connect لمدفوعات السوق، ودعم معاملات اليورو. يتضمن ذلك إنشاء دوال سحابية آمنة للتعامل مع نوايا الدفع، والمدفوعات للبائعين، وجمع رسوم المنصة.   
+
+بناء "مجموعة أدوات البائع المحترف" في لوحة تحكم البائع، بما في ذلك أدوات لإدارة الإعلانات بالجملة وتقارير أداء متقدمة مع رسوم بيانية (باستخدام Chart.js كما هو موضح في ).   
+
+تطوير "واجهة المالك الذكية" (AdminDashboard.vue). هذا هو التطور النهائي للوحة تحكم المسؤول المطلوبة في  و. لن تعرض البيانات الأولية فحسب، بل ستستخدم الذكاء الاصطناعي لتوليد رؤى استراتيجية:   
+
+ستقوم بتصور البيانات من تحليلات المنصة (نمو المستخدمين، الإيرادات).
+
+ستدمج رؤى من data-magnet-service لإظهار اتجاهات السوق.
+
+ستستخدم الذكاء الاصطناعي لتقديم توصيات قابلة للتنفيذ، مثل "انخفض تفاعل البائعين في بلوفديف بنسبة 15%. نقترح حملة ترويجية مستهدفة." يتطلب هذا نهج تصميم لوحة معلومات ذكاء الأعمال (BI).   
+
+تنفيذ نظام إشعارات قوي في الوقت الفعلي باستخدام Firebase Cloud Messaging (FCM) للإشعارات الفورية للعملاء على الأجهزة المحمولة والويب، يتم تشغيلها بواسطة أحداث الخلفية.   
+
+الخطوة 11: التدقيق النهائي، الإطلاق الرسمي، وعمليات ما بعد الإطلاق (الإنجاز: 100%)
+الهدف: ضمان أن المنصة آمنة وعالية الأداء وخالية من الأخطاء قبل إطلاقها للجمهور.
+
+المهام:
+
+إجراء تدقيق أمني شامل لجميع الخدمات وقواعد Firestore والتعليمات البرمجية للواجهة الأمامية.
+
+إجراء اختبارات تحميل وتحسين الأداء باستخدام أدوات مثل Google Lighthouse.
+
+تنفيذ مجموعة كاملة من اختبارات النهاية إلى النهاية (E2E) باستخدام إطار عمل مثل Cypress.
+
+تنفيذ الأمر النهائي npm run deploy:production عبر GitHub Actions لدفع المنصة مباشرة إلى mobilebg.eu.
+
+تفعيل المراقبة والتنبيهات بعد الإطلاق في Google Cloud Operations.
+
+بدء استراتيجية الذهاب إلى السوق والبدء في استقطاب الدفعة الأولى من المستخدمين/التجار التجريبيين.
+
+وضع جدول زمني للصيانة الدورية والنسخ الاحتياطي وتخطيط الميزات المستقبلية بناءً على خارطة طريق "خطة القمة".
+
+الجزء الثالث: الملاحق الفنية
+الملحق أ: مخططات بيانات Firestore الموحدة
+سيحتوي هذا الملحق على الهياكل النهائية والمفصلة بصيغة JSON لجميع مجموعات Firestore: users, sellers, listings, reviews, notifications, transactions, companies_data, و news_articles. يوفر هذا مرجعًا واحدًا ونهائيًا لهيكل قاعدة البيانات.
+
+الملحق ب: عقود خدمات API الأساسية
+سيحدد هذا الملحق نقاط نهاية واجهة برمجة التطبيقات RESTful الأساسية لكل خدمة مصغرة، بما في ذلك عنوان URL، وطريقة HTTP، ونص الطلب المتوقع، وعينة من استجابة النجاح. يضمن هذا الوضوح والاتساق للتواصل بين الخدمات وتكامل الواجهة الأمامية. على سبيل المثال:
+
+الخدمة: listing-service
+
+نقطة النهاية: POST /listings
+
+المصادقة: مطلوبة (Bearer Token)
+
+نص الطلب: {"make": "BMW", "model": "X5",...}
+
+استجابة النجاح (201): {"listingId": "...", "message": "Listing created successfully."}
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+-1--------------------------------------------------------------------------------------
+
+
+
+{
+  "name": "bg-cars-platform-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test:unit": "vitest",
+    "test:e2e": "cypress run",
+    "lint": "eslint. --ext.vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path.gitignore",
+    "deploy:staging": "npm run build && firebase deploy --only hosting:staging",
+    "deploy:production": "npm run build && firebase deploy --only hosting:production"
+  },
+  "dependencies": {
+    "axios": "^1.7.2",
+    "chart.js": "^4.4.3",
+    "firebase": "^10.12.2",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
+    "vue": "^3.4.29",
+    "vue-chartjs": "^5.3.1",
+    "vue-i18n": "^9.13.1",
+    "vue-router": "^4.3.3"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.10.3",
+    "@types/node": "^20.14.2",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/tsconfig": "^0.5.1",
+    "autoprefixer": "^10.4.19",
+    "cypress": "^13.11.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "postcss": "^8.4.38",
+    "prettier": "^3.3.2",
+    "tailwindcss": "^3.4.4",
+    "typescript": "~5.4.5",
+    "vite": "^5.2.13",
+    "vitest": "^1.6.0",
+    "vue-tsc": "^2.0.19"
+  }
+}
+
+
+
+-2--------------------------------------------------------------------------------------
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png|webp|svg)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**",
+        "headers":
+      }
+    ]
+  }
+}
+-3----------------------------------------------------------------------------------------
+# This workflow builds and deploys the Vue.js frontend to Firebase Hosting.
+# It triggers on every push to the 'main' branch.
+
+name: Deploy Frontend to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live
+          projectId: bg-cars-platform
+-4--------------------------------------------------------------------------------------
+
+// File: src/services/firebase/config.ts
+// Centralized Firebase configuration and initialization.
+// IMPORTANT: Environment variables must be set in a.env file for security.
+
+import { initializeApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
+import { getFirestore, type Firestore } from 'firebase/firestore';
+import { getStorage, type FirebaseStorage } from 'firebase/storage';
+import { getAnalytics, type Analytics } from 'firebase/analytics';
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+};
+
+// Initialize Firebase
+const app: FirebaseApp = initializeApp(firebaseConfig);
+
+// Export Firebase services for use throughout the application
+export const auth: Auth = getAuth(app);
+export const db: Firestore = getFirestore(app);
+export const storage: FirebaseStorage = getStorage(app);
+export const analytics: Analytics = getAnalytics(app);
+
+
+-5--------------------------------------------------------------------------------------
+
+# Firebase configuration keys.
+# Copy this file to.env.local and fill in your actual project credentials.
+# DO NOT commit.env.local to version control.
+
+VITE_FIREBASE_API_KEY="AIzaSyAUqK5WGZSIYehZUmu1E0qFNllUOqsF8dE"
+VITE_FIREBASE_AUTH_DOMAIN="bg-cars-platform.firebaseapp.com"
+VITE_FIREBASE_PROJECT_ID="bg-cars-platform"
+VITE_FIREBASE_STORAGE_BUCKET="bg-cars-platform.appspot.com"
+VITE_FIREBASE_MESSAGING_SENDER_ID="407228642196"
+VITE_FIREBASE_APP_ID="YOUR_APP_ID"
+VITE_FIREBASE_MEASUREMENT_ID="YOUR_MEASUREMENT_ID"
+-6--------------------------------------------------------------------------------------
+/* File: src/styles/global.css */
+/* This file establishes the base design system inspired by mobile.de */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Color Palette */
+  --color-primary-green: #006747;
+  --color-primary-green-hover: #005238;
+  --color-background: #FFFFFF;
+  --color-background-soft: #f5f5f5;
+  --color-text-dark: #262626;
+  --color-text-light: #595959;
+  --color-border: #d9d9d9;
+  --color-link-blue: #0073e5;
+  --color-error: #d32f2f;
+  --color-success: #388e3c;
+
+  /* Font Styling */
+  --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* Shadows & Borders */
+  --box-shadow-light: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --box-shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --border-radius-main: 4px;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--color-background-soft);
+  color: var(--color-text-dark);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Component Base Styles */
+.card-style {
+  @apply bg-white border border-gray-200 rounded-md shadow-sm transition-shadow duration-300 hover:shadow-md;
+}
+
+.btn {
+  @apply font-bold py-2 px-4 rounded-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-primary-green text-white border border-primary-green hover:bg-primary-green-hover;
+  --tw-ring-color: var(--color-primary-green);
+}
+
+.btn-secondary {
+  @apply bg-white text-text-dark border border-border hover:bg-background-soft;
+  --tw-ring-color: var(--color-border);
+}
+
+.input-field {
+  @apply w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent;
+}
+-7--------------------------------------------------------------------------------------
+
+// File: src/i18n/index.ts
+// Centralized configuration for vue-i18n.
+
+import { createI18n } from 'vue-i18n';
+import en from './locales/en.json';
+import bg from './locales/bg.json';
+
+// Custom pluralization rule for Bulgarian language
+const bulgarianPluralizationRule = (choice: number, choicesLength: number) => {
+  if (choicesLength === 1) {
+    return 0;
+  }
+  const remainder = choice % 10;
+  if (remainder === 1 && choice % 100!== 11) {
+    return 0; // Singular form
+  }
+  return 1; // Plural form
+};
+
+const i18n = createI18n({
+  legacy: false, // Enables Composition API mode
+  locale: 'bg', // Default locale is Bulgarian
+  fallbackLocale: 'en',
+  messages: {
+    en,
+    bg,
+  },
+  pluralizationRules: {
+    'bg': bulgarianPluralizationRule,
+  },
+  // Suppress warnings for missing translations during development
+  silentTranslationWarn: true,
+  silentFallbackWarn: true,
+});
+
+export default i18n;
+-8--------------------------------------------------------------------------------------
+
+{
+  "navbar": {
+    "home": "Home",
+    "search": "Search Cars",
+    "sell": "Sell Car",
+    "login": "Login",
+    "register": "Register",
+    "profile": "My Profile",
+    "logout": "Logout"
+  },
+  "auth": {
+    "loginTitle": "Login to your Account",
+    "registerTitle": "Create a New Account",
+    "email": "Email Address",
+    "password": "Password",
+    "loginButton": "Login",
+    "registerButton": "Register",
+    "or": "OR",
+    "loginWithGoogle": "Login with Google",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?"
+  }
+}
+-10-------------------------------------------------------------------------------------
+{
+  "navbar": {
+    "home": "Начало",
+    "search": "Търсене на коли",
+    "sell": "Продай кола",
+    "login": "Вход",
+    "register": "Регистрация",
+    "profile": "Моят профил",
+    "logout": "Изход"
+  },
+  "auth": {
+    "loginTitle": "Вход в профила",
+    "registerTitle": "Създаване на нов профил",
+    "email": "Имейл адрес",
+    "password": "Парола",
+    "loginButton": "Вход",
+    "registerButton": "Регистрация",
+    "or": "ИЛИ",
+    "loginWithGoogle": "Вход с Google",
+    "noAccount": "Нямате профил?",
+    "haveAccount": "Вече имате профил?"
+  }
+}
+-11-------------------------------------------------------------------------------------
+// File: src/stores/auth.ts
+// Pinia store for managing authentication state and user data.
+
+import { defineStore } from 'pinia';
+import { auth, db } from '@/services/firebase/config';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+  onAuthStateChanged,
+  type User
+} from 'firebase/auth';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { ref } from 'vue';
+
+interface UserProfile {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+  isDealer: boolean;
+  sellerProfileId: string | null;
+}
+
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref<User | null>(null);
+  const userProfile = ref<UserProfile | null>(null);
+  const loading = ref(true);
+
+  const fetchUserProfile = async (firebaseUser: User) => {
+    const userDocRef = doc(db, 'users', firebaseUser.uid);
+    const userDocSnap = await getDoc(userDocRef);
+    if (userDocSnap.exists()) {
+      userProfile.value = userDocSnap.data() as UserProfile;
+    } else {
+      // Create a profile if it doesn't exist (e.g., for social logins)
+      const newProfile: UserProfile = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName,
+        photoURL: firebaseUser.photoURL,
+        isDealer: false,
+        sellerProfileId: null,
+      };
+      await setDoc(userDocRef, {...newProfile, createdAt: serverTimestamp() });
+      userProfile.value = newProfile;
+    }
+  };
+
+  onAuthStateChanged(auth, async (firebaseUser) => {
+    if (firebaseUser) {
+      user.value = firebaseUser;
+      await fetchUserProfile(firebaseUser);
+    } else {
+      user.value = null;
+      userProfile.value = null;
+    }
+    loading.value = false;
+  });
+
+  const register = async (credentials: any) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, credentials.email, credentials.password);
+    const newUserProfile: UserProfile = {
+      uid: userCredential.user.uid,
+      email: userCredential.user.email,
+      displayName: credentials.displayName |
+
+| null,
+      photoURL: null,
+      isDealer: false,
+      sellerProfileId: null,
+    };
+    await setDoc(doc(db, 'users', userCredential.user.uid), {
+     ...newUserProfile,
+      createdAt: serverTimestamp(),
+    });
+  };
+
+  const login = async (credentials: any) => {
+    await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+  };
+
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(auth, provider);
+  };
+
+  const logout = async () => {
+    await signOut(auth);
+  };
+
+  return {
+    user,
+    userProfile,
+    loading,
+    register,
+    login,
+    loginWithGoogle,
+    logout,
+  };
+});
+-12-------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
