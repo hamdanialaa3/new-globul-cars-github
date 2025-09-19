@@ -1,0 +1,656 @@
+# 🇧🇬 Bulgarian Car Marketplace - Firebase Services
+
+Bulgarian Car Marketplace - Integrated Firebase system with full support for Bulgarian and European customizations.
+
+## 📁 Core Files
+
+### 🔧 `firebase-config.ts`
+**Firebase Configuration optimized for Bulgaria**
+- Firebase setup with Bulgarian customizations
+- Support for European currency (EUR) and Bulgarian formatting
+- Europe/Sofia timezone settings
+- Comprehensive Bulgarian formatting utilities
+- Firebase emulators support for local development
+
+### 🔐 `auth-service.ts`
+**Advanced authentication system for Bulgarian users**
+- Multi-language login system (BG/EN)
+- Google and Facebook login support
+- Bulgarian user profile management with BulgarianUser interface
+- Bulgarian phone number validation (+359)
+- Bulgarian error and success messages
+- Role management (buyer, seller, admin, moderator)
+
+### 💬 `realtimeMessaging.ts`
+**Advanced real-time messaging system**
+- Real-time messaging between buyers and sellers
+- Real-time typing indicators
+- Chat room management
+- Attachment and image support
+- New message notifications
+- Read/unread message tracking
+- Support for car-specific conversations
+
+### 🎨 `ChatInterface.tsx`
+**Interactive chat interface**
+- Modern and responsive interface
+- Support for text messages and images
+- Typing indicator with animations
+- Message status display (sent/read)
+- Bulgarian time formatting
+- Conversation closure capability
+
+### 📋 `ChatList.tsx`
+**Active conversations list**
+- Display all active conversations
+- Number of unread messages
+- Preview of last message
+- Information about related car
+- Smart time ordering
+- Conversation search
+
+### 📄 `MessagesPage.tsx`
+**Complete messaging page**
+- Responsive layout with conversation list
+- Main chat interface
+- Management of selected conversation state
+- Support for navigation between conversations
+- Empty state display when no conversations exist
+
+### � `index.ts`
+**Main export file for all services**
+- Export all services and utilities
+- Daily usage helper functions
+- Automatic service setup
+- Service status checking
+- Flexible direct import support
+
+### 🧪 `services-test.ts`
+**نظام اختبار شامل للخدمات**
+- اختبارات Firebase initialization
+- اختبارات د بلغارية
+- اختبارات mock للخدمات
+- فحص حة خدمات
+- تقارير مفصلة للنتائج
+
+## ✨ ميزات جديدة
+
+### � مراسلة فرية (Real-time Messaging)
+- **مراسلة فرية**: نظام محادثة فرية بين مشترين بائعين
+- **مؤشرات كتابة**: عرض حة "يكتب آن..."  قت فعلي
+- **إدارة محادثات**: إنشاء إدارة غرف محادثة تلقائياً
+- **إشعارات ذكية**: تتبع رسائل جديدة مقرءة
+- **دعم سيارات**: ربط محادثات بسيارات محددة
+- **اجهة حديثة**: تصميم متجاب  دعم كامل للبلغارية
+
+### 🎨 بحث متقدم (Advanced Search)
+- **فلترة شاملة**: بحث حسب سعر، سنة، كيلمترات، نع
+- **بحث ذكي**: بحث  جانب عميل لتجاز قيد Firestore
+- **اجهة بلغارية**: جميع نصص تسميات بلغة بلغارية
+- **نتائج فرية**: تحديث نتائج عند تغيير فلاتر
+- **حفظ تفضيلات**: تذكر إعدادات بحث أخيرة
+
+### 📸 إدارة صر (Image Management)
+- **رفع متعدد**: رفع صر متعددة  سحب إفلات
+- **رض تفاعلي**: عرض صر  رض  تنقل
+- **تحسين أداء**: ضغط صر تحسين جدة
+- **دعم صيغ**: دعم JPG، PNG، GIF  تحقق  صحة
+- **اينة فرية**: عرض صر فر رفعها
+
+### 🌐 ترجمة شاملة (Comprehensive Translation)
+- **لغتان رئيسيتان**: دعم كامل للبلغارية إنجليزية
+- **Hook متقدم**: نظام ترجمة  Context API
+- **تغطية كاملة**: ترجمة جميع نصص رسائل
+- **تنسيق بلغاري**: تاريخ أرقام بتنسيق بلغاري
+- **سهلة تسع**: إضافة لغات جديدة بسهلة
+
+### 🧪 نظام اختبار محسن (Enhanced Testing)
+- **تغطية شاملة**: اختبارات لجميع خدمات مكنات
+- **Mocking متقدم**: محاكاة Firebase  React Router
+- **اختبارات فرية**: Jest + React Testing Library
+- **تقارير مفصلة**: نتائج اضحة  تفاصيل أخطاء
+- **CI/CD جاهز**: جاهز للتكامل  أنظمة بناء
+
+### 1. إعداد بيئة
+```bash
+# نسخ ملف بيئة
+cp .env.example .env
+
+# تحديث متغيرات Firebase  .env
+# VITE_FIREBASE_API_KEY=your-api-key-here
+# VITE_FIREBASE_PROJECT_ID=globul-cars
+# إلخ...
+```
+
+### 2. تشغيل Firebase Emulators
+```bash
+# تشغيل جميع محاكيات
+firebase emulators:start
+
+#  تشغيل محاكيات محددة
+firebase emulators:start --only auth,firestore,storage
+```
+
+### 3. اختبار خدمات
+```bash
+# تشغيل اختبارات خدمات
+npm run test:services
+
+#  تشغيل مباشرة
+node services-test.ts
+```
+
+### 4. استخدام خدمات
+```typescript
+import {
+  initializeBulgarianFirebase,
+  bulgarianAuth,
+  bulgarianMessaging,
+  bulgarianUtils
+} from './index';
+
+// تهيئة Firebase
+await initializeBulgarianFirebase();
+
+// تسجيل مستخدم جديد
+const user = await bulgarianAuth.signUp(
+  'user@globul-cars.bg',
+  'password123',
+  {
+    displayName: 'Иван Иванов',
+    phoneNumber: '+359888123456',
+    preferredLanguage: 'bg',
+    location: 'София'
+  }
+);
+
+// إضافة تعليق  سيارة
+const messageId = await bulgarianMessaging.sendCarMessage(
+  'CAR-BG-123456-ABCDEF',
+  'Отлична кола! Може ли да се видим?',
+  'question'
+);
+
+// استخدام أدات مساعدة
+const formattedPrice = bulgarianUtils.formatPrice(25000); // "25,000.00 €"
+const isValidPhone = bulgarianUtils.validatePhone('+359888123456'); // true
+```
+
+## 🌍 ميزات بلغارية متقدمة
+
+### 💰 نظام عملة تنسيق
+```typescript
+import { BulgarianFirebaseUtils } from './firebase-config';
+
+// تنسيق عملة ربية
+const price = BulgarianFirebaseUtils.formatCurrency(25000); // "25 000,00 €"
+
+// تنسيق تاريخ بلغاري
+const date = BulgarianFirebaseUtils.formatTimestamp(firebaseTimestamp);
+// "15 декември 2024 г., 14:30"
+
+BulgarianFirebaseUtils.formatBulgarianDate(new Date());
+// "15.12.2024"
+```
+
+### 📱 تحقق  بيانات بلغارية
+```typescript
+// تحقق  رقم هاتف بلغاري
+const isValid = BulgarianFirebaseUtils.validateBulgarianPhone('+359888123456'); // true
+
+// تحقق  رمز بريدي بلغاري
+const isValidPostal = BulgarianFirebaseUtils.validateBulgarianPostalCode('1000'); // true
+
+// حصل  قت بلغاري
+const bulgarianTime = BulgarianFirebaseUtils.getBulgarianTime();
+
+// تنظيف نص بلغاري
+const cleanText = BulgarianFirebaseUtils.sanitizeBulgarianText('Hello <script>alert("hack")</script> World!');
+```
+
+### 🆔 إنشاء رفات بلغارية
+```typescript
+import { bulgarianUtils } from './index';
+
+// إنشاء رفات فريدة
+const carId = bulgarianUtils.generateCarId();     // "BG-CAR-1A2B3C-XYZ789"
+const userId = bulgarianUtils.generateUserId();   // "BG-USER-1A2B3C-XYZ789"
+const msgId = bulgarianUtils.generateMessageId(); // "BG-MSG-1A2B3C-XYZ789"
+```
+
+## 🔧 إعداد بيئة تفصيلي
+
+### متغيرات بيئة مطلبة (.env)
+```env
+# Firebase Configuration
+VITE_FIREBASE_API_KEY=your-actual-firebase-api-key
+VITE_FIREBASE_AUTH_DOMAIN=globul-cars.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=globul-cars
+VITE_FIREBASE_STORAGE_BUCKET=globul-cars.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
+VITE_FIREBASE_MEASUREMENT_ID=G-ABCDEFGHIJ
+
+# Bulgarian Configuration
+VITE_BULGARIAN_CURRENCY=EUR
+VITE_BULGARIAN_REGION=Bulgaria
+VITE_BULGARIAN_LOCALE=bg-BG
+VITE_BULGARIAN_TIMEZONE=Europe/Sofia
+VITE_BULGARIAN_DEFAULT_LANGUAGE=bg
+
+# Development Environment
+VITE_USE_EMULATORS=true
+VITE_NODE_ENV=development
+
+# Security
+VITE_ENCRYPTION_KEY=your-encryption-key-here
+VITE_JWT_SECRET=your-jwt-secret-here
+
+# External Services
+VITE_GOOGLE_MAPS_API_KEY=your-google-maps-api-key
+VITE_RECAPTCHA_SITE_KEY=your-recaptcha-site-key
+```
+
+### Firebase Configuration (firebase.json)
+```json
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run lint"]
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "emulators": {
+    "auth": { "port": 9099 },
+    "firestore": { "port": 8080 },
+    "functions": { "port": 5001 },
+    "storage": { "port": 9199 },
+    "ui": { "enabled": true, "port": 4000 }
+  }
+}
+```
+
+## 📊 هيكل قاعدة بيانات
+
+### مجمعات Firestore رئيسية
+```
+users/                          # ملفات مستخدمين بلغارية
+  ├── {userId}/
+  │   ├── displayName: string     # اسم بلغة بلغارية
+  │   ├── email: string
+  │   ├── phoneNumber: string     # رقم هاتف بلغاري (+359)
+  │   ├── preferredLanguage: 'bg' | 'en'
+  │   ├── currency: 'EUR'
+  │   ├── timezone: 'Europe/Sofia'
+  │   ├── role: 'buyer' | 'seller' | 'admin' | 'moderator'
+  │   ├── location: string        # مدينة بلغارية
+  │   └── statistics: object      # إحصائيات مستخدم
+
+cars/                           # سيارات رضة للبيع
+  ├── {carId}/
+  │   ├── title: string          # عنان إعلان
+  │   ├── price: number          # سعر بير
+  │   ├── currency: 'EUR'
+  │   ├── location: string       # مقع سيارة
+  │   ├── lastActivity: timestamp
+  │   └── messageCount: object   # عدد رسائل حسب نع
+
+carMessages/                    # تعليقات أسئلة سيارات
+  ├── {messageId}/
+  │   ├── carId: string
+  │   ├── userId: string
+  │   ├── text: string           # نص (دعم بلغاري كامل)
+  │   ├── type: 'comment' | 'question' | 'offer' | 'review'
+  │   ├── rating?: number        # تقييم (1-5)
+  │   ├── price?: number         # سعر عرض
+  │   ├── language: 'bg' | 'en'
+  │   ├── likes: number
+  │   └── timestamp: timestamp
+
+chatRooms/                      # غرف دردشة
+  ├── {chatRoomId}/
+  │   ├── participants: string[]
+  │   ├── carId: string
+  │   ├── carTitle: string       # عنان سيارة
+  │   ├── lastMessage: object
+  │   ├── unreadCount: object    # عدد رسائل غير مقرءة
+  │   └── messageCount: number
+
+chatMessages/                   # رسائل دردشة
+  ├── {messageId}/
+  │   ├── chatRoomId: string
+  │   ├── userId: string
+  │   ├── text: string
+  │   └── timestamp: timestamp
+
+notifications/                  # إشعارات
+  ├── {notificationId}/
+  │   ├── userId: string
+  │   ├── type: string
+  │   ├── title: string          # عنان بلغة بلغارية
+  │   ├── body: string           # محتى إشعار
+  │   └── isRead: boolean
+```
+
+## 🛡️ أمان امتث
+
+### 🔒 إجراءات أمان متقدمة
+- تشر بيانات حساسة باستخدام AES-256
+- تحقق  صحة جميع مدخلات
+- حماية  XSS  SQL injection
+- rate limiting متقدم للـ API calls
+- تشر ملفات  Firebase Storage
+
+### 📋 امتث ربي بلغاري
+- دعم كامل لـ GDPR للبيانات شخصية
+- تنسيق عملة ربية (EUR)  فاصل بلغارية
+- رسائل خطأ نجاح بلغة بلغارية
+- دعم طقة زية Europe/Sofia
+- تحقق  صحة بيانات بلغارية (هاتف، عناين، أكاد بريدية)
+
+## 🧪 نظام اختبارات شامل
+
+### تشغيل اختبارات
+```bash
+# اختبارات خدمات كاملة
+npm run test:services
+
+# اختبارات حدة
+npm run test:unit
+
+# اختبارات تكامل
+npm run test:integration
+
+# اختبارات Firebase
+npm run test:firebase
+```
+
+### أناع اختبارات متاحة
+- ✅ **Firebase Initialization Tests** - فحص تهيئة Firebase
+- ✅ **Bulgarian Utilities Tests** - اختبار د بلغارية
+- ✅ **Authentication Mock Tests** - اختبارات مصادقة
+- ✅ **Messaging Mock Tests** - اختبارات مراسلة
+- ✅ **Service Status Tests** - فحص حة خدمات
+
+## 📈 مراقبة تحليلات
+
+### Firebase Analytics للبلغاريا
+```typescript
+import { analytics } from './firebase-config';
+
+// تتبع عرض سيارة
+analytics.logEvent('car_view', {
+  car_id: 'CAR-BG-123456-ABCDEF',
+  user_type: 'buyer',
+  language: 'bg',
+  currency: 'EUR'
+});
+
+// تتبع إرس رسة
+analytics.logEvent('message_sent', {
+  message_type: 'question',
+  language: 'bg',
+  car_category: 'седан'
+});
+
+// تتبع تسجيل مستخدم بلغاري
+analytics.logEvent('bulgarian_user_signup', {
+  signup_method: 'google',
+  preferred_language: 'bg',
+  location: 'София'
+});
+```
+
+## 🔄 نشر صيانة
+
+### إعداد نشر
+```bash
+# بناء مشرع
+npm run build
+
+# نشر  Firebase Hosting
+firebase deploy --only hosting
+
+# نشر Functions
+firebase deploy --only functions
+
+# نشر كل شيء
+firebase deploy
+```
+
+### مراقبة أداء
+- Firebase Performance Monitoring
+- تتبع استهلاك Firestore reads/writes
+- مراقبة استخدام Storage
+- تحليلات استعلامات بطيئة
+
+## 📞 دعم مساعدة
+
+### استكشاف أخطاء
+```bash
+# فحص حة خدمات
+node -e "const { checkBulgarianFirebaseStatus } = require('./index.ts'); checkBulgarianFirebaseStatus().then(console.log);"
+
+# تشغيل اختبارات مفصلة
+node services-test.ts
+
+# فحص Firebase emulators
+firebase emulators:start --inspect-functions
+```
+
+### مارد مدة
+- 📚 [Firebase Documentation](https://firebase.google.com/docs)
+- 🇧🇬 [Bulgarian Localization Guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale)
+- 💰 [EUR Currency Formatting](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat)
+- 🕐 [Europe/Sofia Timezone](https://en.wikipedia.org/wiki/Europe/Sofia)
+
+---
+
+## 🎯 خلاصة
+
+تم تطير  نظام باسطة **GitHub Copilot** خصيصاً لصة **Globul Cars** بلغارية،  تركيز :
+
+- ✅ **دعم كامل للغة بلغارية** رسائل localized
+- ✅ **تنسيق ربي** للعملة تاريخ
+- ✅ **أمان متقدم** حماية بيانات
+- ✅ **أداء محسن**  Firebase emulators
+- ✅ **اختبارات شاملة** لجميع خدمات
+- ✅ **تثيق مفصل** بلغتين عربية بلغارية
+
+🚗🇧🇬 **Globul Cars - صة سيارات بلغارية لى  تقنية Firebase متقدمة!**
+  'car123',
+  'Отлична кола! Колко е пробегът?',
+  'question'
+);
+
+// استماع للتعليقات
+const unsubscribe = bulgarianMessaging.listenToCarMessages('car123', (messages) => {
+  console.log('New messages:', messages);
+});
+```
+
+### 3. إنشاء غرفة دردشة
+```typescript
+// إنشاء  حصل  غرفة دردشة
+const chatRoomId = await bulgarianMessaging.createOrGetChatRoom('car123', 'seller456');
+
+// إرس رسة  دردشة
+await bulgarianMessaging.sendChatMessage(chatRoomId, 'Здравейте, интересувам се от колата');
+```
+
+## 🌍 ميزات بلغارية
+
+### 💰 دعم عملة تنسيق
+```typescript
+import { BulgarianFirebaseUtils } from './integrations/firebase-codelab/firebase-config';
+
+// تنسيق عملة
+const price = BulgarianFirebaseUtils.formatCurrency(25000); // "25,000.00 EUR"
+
+// تنسيق تاريخ
+const date = BulgarianFirebaseUtils.formatTimestamp(firebaseTimestamp); // "15 декември 2024, 14:30"
+```
+
+### 📱 تحقق  صحة بيانات بلغارية
+```typescript
+// تحقق  رقم هاتف بلغاري
+const isValid = BulgarianFirebaseUtils.isValidBulgarianPhone('+359888123456'); // true
+
+// إنشاء رف فريد بلغاري
+const id = BulgarianFirebaseUtils.generateBulgarianId('CAR'); // "BG-CAR-1A2B3C-XYZ789"
+```
+
+## 🔧 إعداد بيئة
+
+### متغيرات بيئة مطلبة
+```env
+# Firebase Configuration
+VITE_FIREBASE_API_KEY=your-api-key
+VITE_FIREBASE_AUTH_DOMAIN=globul-cars.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=globul-cars
+VITE_FIREBASE_STORAGE_BUCKET=globul-cars.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
+VITE_FIREBASE_APP_ID=1:123456789:web:abcdef123456
+VITE_FIREBASE_MEASUREMENT_ID=G-ABCDEFGHIJ
+
+# Development
+VITE_USE_EMULATORS=true
+```
+
+### تشغيل محاكيات
+```bash
+# تشغيل Firebase emulators
+firebase emulators:start
+
+#  تشغيل emulators محددة
+firebase emulators:start --only auth,firestore
+```
+
+## 📊 هيكل قاعدة بيانات
+
+### مجمعات Firestore
+```
+users/                          # ملفات مستخدمين
+  ├── {userId}/
+  │   ├── displayName: string
+  │   ├── email: string
+  │   ├── phoneNumber: string
+  │   ├── preferredLanguage: 'bg' | 'en'
+  │   ├── currency: 'EUR'
+  │   └── role: 'buyer' | 'seller' | 'admin'
+
+cars/                           # سيارات
+  ├── {carId}/
+  │   ├── title: string
+  │   ├── price: number
+  │   ├── currency: 'EUR'
+  │   ├── location: string
+  │   └── lastActivity: timestamp
+
+carMessages/                    # تعليقات سيارات
+  ├── {messageId}/
+  │   ├── carId: string
+  │   ├── userId: string
+  │   ├── text: string
+  │   ├── type: 'comment' | 'question' | 'offer'
+  │   └── timestamp: timestamp
+
+chatRooms/                      # غرف دردشة
+  ├── {chatRoomId}/
+  │   ├── participants: string[]
+  │   ├── carId: string
+  │   └── lastMessage: object
+
+chatMessages/                   # رسائل دردشة
+  ├── {messageId}/
+  │   ├── chatRoomId: string
+  │   ├── userId: string
+  │   ├── text: string
+  │   └── timestamp: timestamp
+```
+
+## 🛡️ أمان امتث
+
+### 🔒 إجراءات أمان
+- تشر بيانات حساسة
+- تحقق  صحة مدخلات
+- حماية  XSS attacks
+- rate limiting للـ API calls
+
+### 📋 امتث بلغاري
+- دعم GDPR للبيانات شخصية
+- تنسيق عملة ربية
+- رسائل بلغة بلغارية
+- دعم طقة زية بلغارية
+
+## 🧪 اختبارات
+
+### تشغيل اختبارات
+```bash
+# اختبارات حدة
+npm run test:unit
+
+# اختبارات تكامل
+npm run test:integration
+
+# اختبارات Firebase
+npm run test:ai
+```
+
+### ملفات اختبار
+- `tests/firebase-codelab/auth-service.test.ts`
+- `tests/firebase-codelab/messaging-service.test.ts`
+- `tests/firebase-codelab/firebase-config.test.ts`
+
+## 📈 مراقبة تحليلات
+
+### Firebase Analytics
+```typescript
+// تتبع أحداث مخصصة
+import { analytics } from './integrations/firebase-codelab/firebase-config';
+
+// تتبع عرض سيارة
+analytics.logEvent('car_view', {
+  car_id: 'car123',
+  user_type: 'buyer'
+});
+
+// تتبع إرس رسة
+analytics.logEvent('message_sent', {
+  message_type: 'question',
+  language: 'bg'
+});
+```
+
+## 🔄 تحديثات صيانة
+
+### إدارة إصدارات
+- استخدام semantic versioning
+- تثيق جميع تغييرات
+- اختبارات شاملة قبل إصدار
+
+### مراقبة أداء
+- Firebase Performance Monitoring
+- تتبع استهلاك مارد
+- تحسين استعلامات
+
+## 📞 دعم مساعدة
+
+للمساعدة  إبلاغ عن مشاكل:
+1. تحقق  console logs
+2. راجع Firebase console للأخطاء
+3. تحقق  إعدادات بيئة
+4. راجع تثيق رسمي لـ Firebase
+
+---
+
+**تم تطير باسطة GitHub Copilot لصة Globul Auto Platform** 🇧🇬🚗

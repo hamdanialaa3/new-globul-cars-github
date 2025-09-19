@@ -1,0 +1,14 @@
+{
+  "name": "admin-dashboard",
+  "version": "1.0.0",
+  "description": "Admin dashboard for Globul Cars with Google & GitHub integrations.",
+  "main": "src/pages/Dashboard.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}

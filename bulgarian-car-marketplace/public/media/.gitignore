@@ -1,0 +1,101 @@
+# Media files - large files should not be committed to Git
+# This is the main media directory - most files here are large and should be stored in cloud storage
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.bmp
+*.tiff
+*.svg
+*.psd
+*.ai
+*.raw
+*.cr2
+*.nef
+*.orf
+*.sr2
+
+# Videos
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.mkv
+*.m4v
+*.3gp
+*.mpg
+*.mpeg
+
+# Audio
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.wma
+*.m4a
+*.opus
+
+# Documents
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+*.txt
+*.rtf
+*.odt
+*.ods
+*.odp
+
+# Archives
+*.zip
+*.rar
+*.7z
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tgz
+*.tbz2
+*.txz
+*.gz
+*.bz2
+*.xz
+*.Z
+*.lzma
+*.lzo
+*.lz4
+*.zst
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Keep essential directories and files
+!README.md
+!.gitkeep
+!images/
+!videos/
+!audio/
+!documents/
+!temp/
+!archive/
+!backup/
+!archives/
+!images/logos/
+!images/icons/
+!images/features/

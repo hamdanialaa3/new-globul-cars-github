@@ -1,0 +1,221 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isModerator() {
+      return isAuthenticated() &&
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'moderator');
+    }
+
+    function isValidBulgarianPhone(phone) {
+      return phone.matches('^(\\+359|0)[8-9][0-9]{7,8}$');
+    }
+
+    function sanitizeText(text) {
+      return text.replace(/[<>{}]/g, '').size() <= 1000;
+    }
+
+    // Users collection
+    match /users/{userId} {
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow create for new users (during registration)
+      allow create: if request.auth != null &&
+                       request.auth.uid == userId &&
+                       request.resource.data.keys().hasAll(['email', 'displayName']) &&
+                       request.resource.data.email == request.auth.token.email;
+
+      // Allow update for owners and admins
+      allow update: if isOwner(userId) || isAdmin();
+
+      // Allow delete for owners and admins
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    // Cars collection
+    match /cars/{carId} {
+      // Allow read for all authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow create for authenticated users
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == request.resource.data.sellerId &&
+                       request.resource.data.keys().hasAll(['title', 'price', 'sellerId']);
+
+      // Allow update for sellers and admins
+      allow update: if isOwner(resource.data.sellerId) || isAdmin();
+
+      // Allow delete for sellers and admins
+      allow delete: if isOwner(resource.data.sellerId) || isAdmin();
+    }
+
+    // Car messages collection
+    match /carMessages/{messageId} {
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow create for authenticated users
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == request.resource.data.userId &&
+                       sanitizeText(request.resource.data.text);
+
+      // Allow update for message owners and moderators
+      allow update: if isOwner(resource.data.userId) || isModerator();
+
+      // Allow delete for message owners and moderators
+      allow delete: if isOwner(resource.data.userId) || isModerator();
+    }
+
+    // Chat messages collection
+    match /chatMessages/{messageId} {
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow create for authenticated users
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == request.resource.data.userId &&
+                       sanitizeText(request.resource.data.text);
+
+      // Allow update for message owners and moderators
+      allow update: if isOwner(resource.data.userId) || isModerator();
+
+      // Allow delete for message owners and moderators
+      allow delete: if isOwner(resource.data.userId) || isModerator();
+    }
+
+    // Chat rooms collection
+    match /chatRooms/{chatRoomId} {
+      // Allow read for participants
+      allow read: if isAuthenticated() &&
+                     request.auth.uid in resource.data.participants;
+
+      // Allow create for authenticated users
+      allow create: if isAuthenticated() &&
+                       request.auth.uid in request.resource.data.participants;
+
+      // Allow update for participants
+      allow update: if isAuthenticated() &&
+                       request.auth.uid in resource.data.participants;
+
+      // Allow delete for participants and admins
+      allow delete: if isAuthenticated() &&
+                       (request.auth.uid in resource.data.participants || isAdmin());
+    }
+
+    // Notifications collection
+    match /notifications/{notificationId} {
+      // Allow read for notification owners
+      allow read: if isOwner(resource.data.userId);
+
+      // Allow create for system (server-side)
+      allow create: if false; // Only server-side functions can create
+
+      // Allow update for notification owners
+      allow update: if isOwner(resource.data.userId);
+
+      // Allow delete for notification owners
+      allow delete: if isOwner(resource.data.userId);
+    }
+
+    // Favorites collection
+    match /favorites/{favoriteId} {
+      // Allow read for owners
+      allow read: if isOwner(resource.data.userId);
+
+      // Allow create for authenticated users
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == request.resource.data.userId;
+
+      // Allow delete for owners
+      allow delete: if isOwner(resource.data.userId);
+    }
+
+    // Reviews collection
+    match /reviews/{reviewId} {
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow create for authenticated users
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == request.resource.data.userId &&
+                       request.resource.data.rating >= 1 &&
+                       request.resource.data.rating <= 5;
+
+      // Allow update for review owners and moderators
+      allow update: if isOwner(resource.data.userId) || isModerator();
+
+      // Allow delete for review owners and moderators
+      allow delete: if isOwner(resource.data.userId) || isModerator();
+    }
+
+    // Reports collection
+    match /reports/{reportId} {
+      // Allow read for moderators and admins
+      allow read: if isModerator();
+
+      // Allow create for authenticated users
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == request.resource.data.reporterId;
+
+      // Allow update for moderators and admins
+      allow update: if isModerator();
+
+      // Allow delete for moderators and admins
+      allow delete: if isModerator();
+    }
+
+    // Statistics collection (read-only for users)
+    match /statistics/{statId} {
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow write for admins only
+      allow write: if isAdmin();
+    }
+
+    // System settings (read-only for users)
+    match /settings/{settingId} {
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow write for admins only
+      allow write: if isAdmin();
+    }
+
+    // Bulgarian-specific validation
+    function isValidBulgarianAddress(address) {
+      return address.keys().hasAll(['city']) &&
+             address.city is string &&
+             address.city.size() > 0;
+    }
+
+    function isValidCarPrice(price) {
+      return price is number &&
+             price >= 100 &&
+             price <= 1000000;
+    }
+
+    function isValidMileage(mileage) {
+      return mileage is number &&
+             mileage >= 0 &&
+             mileage <= 1000000;
+    }
+  }
+}

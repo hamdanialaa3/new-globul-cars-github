@@ -1,0 +1,151 @@
+{
+  "name": "globul-cars-firebase",
+  "version": "1.0.0",
+  "description": "Bulgarian Car Marketplace Firebase Services - Complete Firebase integration with Bulgarian localization",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "firebase emulators:start",
+    "build": "tsc",
+    "test": "npm run test:services",
+    "test:utils": "node --loader ts-node/esm test-utils.ts",
+    "test:firebase": "firebase emulators:exec --only firestore 'npm run test:services'",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:functions": "firebase deploy --only functions",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write .",
+    "clean": "rm -rf dist node_modules/.cache",
+    "setup": "npm install && firebase init",
+    "docs": "typedoc --out docs src"
+  },
+  "keywords": [
+    "firebase",
+    "bulgarian",
+    "car-marketplace",
+    "typescript",
+    "authentication",
+    "messaging",
+    "firestore",
+    "bulgaria",
+    "eur",
+    "european"
+  ],
+  "author": "GitHub Copilot",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hamdanialaa3/new-globul-cars"
+  },
+  "bugs": {
+    "url": "https://github.com/hamdanialaa3/new-globul-cars/issues"
+  },
+  "homepage": "https://github.com/hamdanialaa3/new-globul-cars#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "dependencies": {
+    "@azure/msal-node": "^3.7.4",
+    "@google-cloud/bigquery": "^8.1.1",
+    "@google-cloud/dialogflow": "^7.2.0",
+    "@google-cloud/kms": "^5.2.0",
+    "@google-cloud/pubsub": "^5.2.0",
+    "@google-cloud/recaptcha-enterprise": "^6.3.0",
+    "@google-cloud/speech": "^7.2.0",
+    "@google-cloud/tasks": "^6.2.0",
+    "@google-cloud/text-to-speech": "^6.3.0",
+    "@google-cloud/translate": "^9.2.0",
+    "@google-cloud/vision": "^5.3.3",
+    "@googlemaps/js-api-loader": "^1.16.10",
+    "@types/google.maps": "^3.58.1",
+    "axios": "^1.12.2",
+    "firebase": "^12.2.1",
+    "googleapis": "^160.0.0",
+    "mysql2": "^3.15.0"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/node": "^24.5.2",
+    "eslint": "^8.0.0",
+    "firebase-tools": "^13.0.0",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.0",
+    "typedoc": "^0.25.0",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "firebase": "^12.2.1"
+  },
+  "files": [
+    "dist",
+    "firebase-config.ts",
+    "auth-service.ts",
+    "messaging-service.ts",
+    "index.ts",
+    "services-test.ts",
+    "firestore.rules",
+    "storage.rules",
+    "firestore.indexes.json",
+    "firebase.json",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./firebase-config": {
+      "types": "./dist/firebase-config.d.ts",
+      "import": "./dist/firebase-config.js"
+    },
+    "./auth-service": {
+      "types": "./dist/auth-service.d.ts",
+      "import": "./dist/auth-service.js"
+    },
+    "./messaging-service": {
+      "types": "./dist/messaging-service.d.ts",
+      "import": "./dist/messaging-service.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ],
+      "firebase-config": [
+        "./dist/firebase-config.d.ts"
+      ],
+      "auth-service": [
+        "./dist/auth-service.d.ts"
+      ],
+      "messaging-service": [
+        "./dist/messaging-service.d.ts"
+      ]
+    }
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/hamdanialaa3"
+  },
+  "contributors": [
+    {
+      "name": "GitHub Copilot",
+      "email": "copilot@github.com",
+      "url": "https://github.com/features/copilot"
+    },
+    {
+      "name": "Hamdan Alaa",
+      "email": "hamdanialaa3@gmail.com",
+      "url": "https://github.com/hamdanialaa3"
+    }
+  ],
+  "config": {
+    "firebase": {
+      "project": "globul-cars",
+      "region": "europe-west1"
+    }
+  }
+}

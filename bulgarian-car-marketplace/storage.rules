@@ -1,0 +1,140 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+             (request.auth.token.email in [
+               'admin@globulcars.bg',
+               'hamda@example.com'
+             ] ||
+              request.auth.token.admin == true);
+    }
+
+    function isValidUser() {
+      return request.auth.token.email_verified == true;
+    }
+
+    function isValidImage() {
+      return request.resource.contentType.matches('image/.*') &&
+             request.resource.size < 10 * 1024 * 1024 && // Max 10MB
+             request.resource.size > 1024; // Min 1KB
+    }
+
+    function isValidDocument() {
+      return request.resource.contentType.matches('(application/pdf|application/msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document)') &&
+             request.resource.size < 5 * 1024 * 1024; // Max 5MB
+    }
+
+    // Car images
+    match /cars/{carId}/{allPaths=**} {
+      // Allow read for all authenticated users
+      allow read: if isAuthenticated() && isValidUser();
+
+      // Allow write for car owner or admin
+      allow write: if (isOwner(carId.split('_')[0]) || isAdmin()) &&
+                       isValidUser() &&
+                       isValidImage();
+
+      // Allow delete for car owner or admin
+      allow delete: if (isOwner(carId.split('_')[0]) || isAdmin()) &&
+                        isValidUser();
+    }
+
+    // User profile images
+    match /users/{userId}/profile/{allPaths=**} {
+      // Allow read for all authenticated users
+      allow read: if isAuthenticated() && isValidUser();
+
+      // Allow write for user themselves or admin
+      allow write: if (isOwner(userId) || isAdmin()) &&
+                       isValidUser() &&
+                       isValidImage();
+
+      // Allow delete for user themselves or admin
+      allow delete: if (isOwner(userId) || isAdmin()) &&
+                        isValidUser();
+    }
+
+    // User documents (ID, license, etc.)
+    match /users/{userId}/documents/{allPaths=**} {
+      // Allow read for user themselves and admins only
+      allow read: if (isOwner(userId) || isAdmin()) && isValidUser();
+
+      // Allow write for user themselves or admin
+      allow write: if (isOwner(userId) || isAdmin()) &&
+                       isValidUser() &&
+                       isValidDocument();
+
+      // Allow delete for user themselves or admin
+      allow delete: if (isOwner(userId) || isAdmin()) &&
+                        isValidUser();
+    }
+
+    // Chat attachments
+    match /messages/{messageId}/{allPaths=**} {
+      // Allow read for message participants or admin
+      allow read: if isAuthenticated() && isValidUser();
+
+      // Allow write for message sender or admin
+      allow write: if isAuthenticated() && isValidUser() &&
+                       (isValidImage() || isValidDocument());
+
+      // Allow delete for message sender or admin
+      allow delete: if isAuthenticated() && isValidUser();
+    }
+
+    // Admin documents
+    match /admin/{allPaths=**} {
+      // Only admins can access admin files
+      allow read, write, delete: if isAdmin() && isValidUser();
+    }
+
+    // Public assets (logos, banners, etc.)
+    match /public/{allPaths=**} {
+      // Allow read for everyone
+      allow read: if true;
+
+      // Allow write/delete for admins only
+      allow write, delete: if isAdmin() && isValidUser();
+    }
+
+    // Temporary files (for processing)
+    match /temp/{userId}/{allPaths=**} {
+      // Allow read/write for user themselves or admin
+      allow read, write: if (isOwner(userId) || isAdmin()) && isValidUser();
+
+      // Temporary files auto-delete after 24 hours
+      allow delete: if true; // Allow cleanup jobs to delete
+    }
+
+    // Backup files
+    match /backups/{allPaths=**} {
+      // Only admins can access backups
+      allow read, write, delete: if isAdmin() && isValidUser();
+    }
+
+    // Thumbnails (auto-generated)
+    match /thumbnails/{allPaths=**} {
+      // Allow read for all authenticated users
+      allow read: if isAuthenticated() && isValidUser();
+
+      // Allow write for system/admin only
+      allow write, delete: if isAdmin() && isValidUser();
+    }
+
+    // Block all other access
+    match /{allPaths=**} {
+      allow read, write, delete: if false;
+    }
+  }
+}

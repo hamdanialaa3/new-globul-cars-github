@@ -1,0 +1,180 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+             firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+             firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isValidImage() {
+      return request.resource.contentType.matches('image/.*') &&
+             request.resource.size < 10 * 1024 * 1024; // 10MB max
+    }
+
+    function isValidDocument() {
+      return request.resource.contentType.matches('(application/pdf|application/msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document)') &&
+             request.resource.size < 5 * 1024 * 1024; // 5MB max
+    }
+
+    function isValidVideo() {
+      return request.resource.contentType.matches('video/.*') &&
+             request.resource.size < 50 * 1024 * 1024; // 50MB max
+    }
+
+    // User profile images
+    match /users/{userId}/profile/{fileName} {
+      // Allow read for all authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow write for the user owner
+      allow write: if isOwner(userId) && isValidImage();
+
+      // Allow delete for the user owner and admins
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    // Car images
+    match /cars/{carId}/images/{fileName} {
+      // Allow read for all authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow write for car owners and admins
+      allow write: if isAuthenticated() &&
+                      (firestore.get(/databases/(default)/documents/cars/$(carId)).data.sellerId == request.auth.uid ||
+                       isAdmin()) &&
+                      isValidImage();
+
+      // Allow delete for car owners and admins
+      allow delete: if isAuthenticated() &&
+                       (firestore.get(/databases/(default)/documents/cars/$(carId)).data.sellerId == request.auth.uid ||
+                        isAdmin());
+    }
+
+    // Car documents (service records, manuals, etc.)
+    match /cars/{carId}/documents/{fileName} {
+      // Allow read for car owners and potential buyers
+      allow read: if isAuthenticated() &&
+                     (firestore.get(/databases/(default)/documents/cars/$(carId)).data.sellerId == request.auth.uid ||
+                      firestore.exists(/databases/(default)/documents/chatRooms/{chatRoom=**}/$(request.auth.uid)));
+
+      // Allow write for car owners and admins
+      allow write: if isAuthenticated() &&
+                      (firestore.get(/databases/(default)/documents/cars/$(carId)).data.sellerId == request.auth.uid ||
+                       isAdmin()) &&
+                      isValidDocument();
+
+      // Allow delete for car owners and admins
+      allow delete: if isAuthenticated() &&
+                       (firestore.get(/databases/(default)/documents/cars/$(carId)).data.sellerId == request.auth.uid ||
+                        isAdmin());
+    }
+
+    // Message attachments
+    match /messages/{messageId}/attachments/{fileName} {
+      // Allow read for authenticated users
+      allow read: if isAuthenticated();
+
+      // Allow write for message owners
+      allow write: if isAuthenticated() &&
+                      firestore.get(/databases/(default)/documents/carMessages/$(messageId)).data.userId == request.auth.uid &&
+                      (isValidImage() || isValidDocument());
+
+      // Allow delete for message owners and moderators
+      allow delete: if isAuthenticated() &&
+                       (firestore.get(/databases/(default)/documents/carMessages/$(messageId)).data.userId == request.auth.uid ||
+                        isAdmin());
+    }
+
+    // Chat attachments
+    match /chats/{chatRoomId}/attachments/{fileName} {
+      // Allow read for chat participants
+      allow read: if isAuthenticated() &&
+                     request.auth.uid in firestore.get(/databases/(default)/documents/chatRooms/$(chatRoomId)).data.participants;
+
+      // Allow write for chat participants
+      allow write: if isAuthenticated() &&
+                      request.auth.uid in firestore.get(/databases/(default)/documents/chatRooms/$(chatRoomId)).data.participants &&
+                      (isValidImage() || isValidDocument() || isValidVideo());
+
+      // Allow delete for chat participants and moderators
+      allow delete: if isAuthenticated() &&
+                       (request.auth.uid in firestore.get(/databases/(default)/documents/chatRooms/$(chatRoomId)).data.participants ||
+                        isAdmin());
+    }
+
+    // System files (admin only)
+    match /system/{fileName} {
+      // Allow read for admins
+      allow read: if isAdmin();
+
+      // Allow write for admins
+      allow write: if isAdmin();
+
+      // Allow delete for admins
+      allow delete: if isAdmin();
+    }
+
+    // Temporary files (for processing)
+    match /temp/{userId}/{fileName} {
+      // Allow read for file owner
+      allow read: if isOwner(userId);
+
+      // Allow write for file owner
+      allow write: if isOwner(userId) &&
+                      (isValidImage() || isValidDocument() || isValidVideo());
+
+      // Allow delete for file owner and admins
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    // Public files (marketing, help, etc.)
+    match /public/{fileName} {
+      // Allow read for all users (including unauthenticated)
+      allow read: if true;
+
+      // Allow write for admins only
+      allow write: if isAdmin();
+
+      // Allow delete for admins only
+      allow delete: if isAdmin();
+    }
+
+    // Bulgarian-specific file naming validation
+    function isValidBulgarianFileName(fileName) {
+      return fileName.matches('^[a-zA-Z0-9а-яА-Я\\-_\\.]+$') &&
+             !fileName.matches('.*\\.\\..*'); // Prevent directory traversal
+    }
+
+    // File size limits based on type
+    function checkFileSize() {
+      let maxSize = 10 * 1024 * 1024; // 10MB default
+
+      if (request.resource.contentType.matches('image/.*')) {
+        maxSize = 5 * 1024 * 1024; // 5MB for images
+      } else if (request.resource.contentType.matches('video/.*')) {
+        maxSize = 50 * 1024 * 1024; // 50MB for videos
+      } else if (request.resource.contentType.matches('application/.*')) {
+        maxSize = 10 * 1024 * 1024; // 10MB for documents
+      }
+
+      return request.resource.size <= maxSize;
+    }
+
+    // Rate limiting helper (basic implementation)
+    function checkUploadRate() {
+      // This is a simplified rate limit check
+      // In production, you might want to use Firestore to track upload counts
+      return true; // Allow uploads for now
+    }
+  }
+}
