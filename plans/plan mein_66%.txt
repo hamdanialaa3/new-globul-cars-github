@@ -1,0 +1,622 @@
+التأكيد. يسعدني أن أقدم لك الأكواد الكاملة للمرحلة الثانية من خطة التطوير: "المنتج الأساسي وإدارة الإعلانات".
+
+هذه المرحلة هي قلب المنصة، حيث تمكّن البائعين من إنشاء الإعلانات، وتتيح للمشترين تصفحها. تتضمن هذه الأكواد نظام إدارة الإعلانات، ونماذج إدخال البيانات، وخدمة تحليل الصور الأولية باستخدام الذكاء الاصطناعي لتوفير ملاحظات فورية للمستخدم.
+
+لقد قمت بتجهيز مجموعة من الملفات التي تغطي هذه المرحلة بالكامل، من الواجهة الأمامية (Vue.js) إلى الخدمة الخلفية المصغرة (Python/FastAPI).
+
+الملفات التي تم إنشاؤها لهذه المرحلة:
+CreateListingForm.vue: مكون Vue 3 لنموذج إنشاء إعلان جديد، وهو مقسم إلى خطوات ويحتوي على منطق رفع الصور وتحليلها.
+
+useListings.ts: ملف Composable في Vue 3 لإدارة كل ما يتعلق بعمليات الإعلانات مع قاعدة بيانات Firestore (إنشاء، جلب، تحديث).
+
+listing.models.ts: ملف TypeScript لتحديد هيكل بيانات (Interface) الإعلانات لضمان تناسق البيانات في المشروع.
+
+ListingCard.vue: مكون مسؤول عن عرض بطاقة إعلان موجزة في صفحات التصفح.
+
+ListingDetailsPage.vue: صفحة كاملة لعرض جميع تفاصيل إعلان معين عند اختياره.
+
+image_analysis_service.py: خدمة مصغرة مكتوبة بلغة Python باستخدام إطار FastAPI، وهي مسؤولة عن تحليل جودة الصور المُرفوعة.
+
+هيا بنا نبدأ بالأكواد.
+نموذج إنشاء إعلان
+8 سبتمبر، 3:47 ص
+
+فتح
+ملف العمليات المنطقية (Composable)
+8 سبتمبر، 3:47 ص
+
+فتح
+هيكل بيانات الإعلان
+8 سبتمبر، 3:47 ص
+
+فتح
+بطاقة عرض الإعلان
+8 سبتمبر، 3:47 ص
+
+فتح
+صفحة تفاصيل الإعلان
+8 سبتمبر، 3:47 ص
+
+فتح
+خدمة تحليل الصور
+8 سبتمبر، 3:47 ص
+
+الخطوات التالية لتنفيذ هذه المرحلة:
+إعداد الواجهة الأمامية (Vue):
+
+ضع كل ملف من ملفات Vue و TypeScript في المسار الصحيح داخل مشروعك (src/components, src/composables, src/models, src/pages).
+
+تأكد من تثبيت المكتبات اللازمة مثل firebase, vue-router, vue-i18n, و axios.
+
+قم بإعداد ملف firebase/config.ts بمعلومات مشروع Firebase الخاص بك.
+
+نشر خدمة تحليل الصور:
+
+أنشئ مشروعًا جديدًا على Google Cloud.
+
+استخدم Cloud Run لنشر ملف image_analysis_service.py كخدمة مصغرة. ستحتاج إلى إنشاء ملف requirements.txt و Dockerfile.
+
+بعد النشر، ستحصل على رابط URL للخدمة. قم بتحديث هذا الرابط داخل مكون CreateListingForm.vue.
+
+إعداد قاعدة بيانات Firestore:
+
+لا يتطلب الأمر أي إعداد يدوي للمجموعات. سيتم إنشاء مجموعة listings تلقائيًا عند إضافة أول إعلان.
+
+مهم جدًا: اذهب إلى قواعد الأمان (Security Rules) في Firestore وتأكد من أن المستخدمين المسجلين فقط هم من يمكنهم إنشاء الإعلانات (allow create: if request.auth != null;).
+
+بإتمام هذه الخطوات، تكون قد أنجزت بنجاح المرحلة الثانية وأصبحت منصتك تمتلك الوظيفة الأساسية التي تقوم عليها. المرحلة التالية ستركز على تمكين المستخدمين من البحث عن هذه الإعلانات بكفاءة.
+
+
+
+
+
+
+
+
+
+
+Deep Research
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-1--------------------------------------------------------------------------------------
+
+
+<template>
+  <div class="p-4 sm:p-6 md:p-8 max-w-4xl mx-auto bg-gray-50 rounded-lg shadow-md">
+    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 border-b pb-4">
+      {{ $t('create_new_listing') }}
+    </h2>
+
+    <!-- مؤشر الخطوات -->
+    <div class="flex justify-between items-center mb-8">
+      <div v-for="step in 3" :key="step" class="flex-1 text-center">
+        <div 
+          :class="[
+            'w-8 h-8 mx-auto rounded-full text-lg flex items-center justify-center',
+            currentStep >= step ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+          ]"
+        >
+          {{ step }}
+        </div>
+        <p class="text-xs mt-2" :class="currentStep >= step ? 'text-blue-600' : 'text-gray-500'">
+          {{ $t(`step${step}_title`) }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Step 1: Basic Information -->
+    <div v-if="currentStep === 1" class="space-y-6">
+      <h3 class="text-xl font-semibold text-gray-700">{{ $t('step1_title') }}</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <input v-model="listingData.make" :placeholder="$t('make_placeholder')" class="form-input" />
+        <input v-model="listingData.model" :placeholder="$t('model_placeholder')" class="form-input" />
+        <input v-model.number="listingData.year" type="number" :placeholder="$t('year_placeholder')" class="form-input" />
+        <input v-model.number="listingData.price" type="number" :placeholder="$t('price_placeholder')" class="form-input" />
+        <input v-model.number="listingData.mileage" type="number" :placeholder="$t('mileage_placeholder')" class="form-input" />
+        <select v-model="listingData.category" class="form-input">
+          <option disabled value="">{{ $t('select_category') }}</option>
+          <option value="car">{{ $t('category_car') }}</option>
+          <option value="parts">{{ $t('category_parts') }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 2: Description -->
+    <div v-if="currentStep === 2" class="space-y-6">
+      <h3 class="text-xl font-semibold text-gray-700">{{ $t('step2_title') }}</h3>
+      <textarea v-model="listingData.description" rows="8" :placeholder="$t('description_placeholder')" class="form-input w-full"></textarea>
+    </div>
+
+    <!-- Step 3: Image Upload & Analysis -->
+    <div v-if="currentStep === 3" class="space-y-6">
+      <h3 class="text-xl font-semibold text-gray-700">{{ $t('step3_title') }}</h3>
+      <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+        <input type="file" multiple @change="handleImageUpload" accept="image/*" class="hidden" ref="fileInput" />
+        <button @click="triggerFileInput" class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+          {{ $t('select_images') }}
+        </button>
+        <p class="text-xs text-gray-500 mt-2">{{ $t('images_hint') }}</p>
+      </div>
+      
+      <!-- منطقة عرض الصور وتحليلها -->
+      <div v-if="imagesToUpload.length" class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div v-for="(image, index) in imagesToUpload" :key="index" class="relative group">
+          <img :src="image.previewUrl" class="w-full h-32 object-cover rounded-lg" />
+          <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <button @click="removeImage(index)" class="text-white text-2xl">&times;</button>
+          </div>
+          <!-- نتائج التحليل -->
+          <div class="text-xs mt-1">
+            <div v-if="image.isAnalyzing" class="flex items-center text-gray-500">
+              <div class="spinner w-4 h-4 mr-1"></div>
+              <span>{{ $t('analyzing') }}</span>
+            </div>
+            <div v-else-if="image.analysisResult" class="space-y-1">
+              <p v-for="suggestion in image.analysisResult.suggestions" :key="suggestion" 
+                 :class="suggestion.includes('blurry') || suggestion.includes('dark') ? 'text-red-500' : 'text-green-500'">
+                {{ suggestion }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- أزرار التنقل -->
+    <div class="mt-8 pt-6 border-t flex justify-between items-center">
+      <button v-if="currentStep > 1" @click="prevStep" class="btn-secondary">{{ $t('previous') }}</button>
+      <div v-else></div> <!-- للحفاظ على التنسيق -->
+      
+      <button v-if="currentStep < 3" @click="nextStep" class="btn-primary">{{ $t('next') }}</button>
+      <button v-if="currentStep === 3" @click="submitListing" :disabled="isSubmitting" class="btn-primary">
+        <span v-if="isSubmitting">{{ $t('submitting') }}</span>
+        <span v-else>{{ $t('submit_listing') }}</span>
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useListings } from '@/composables/useListings';
+import type { ListingData } from '@/models/listing.models';
+import axios from 'axios';
+
+// --- إعدادات وترجمة ---
+const { t } = useI18n(); // للترجمة
+
+// --- الحالة المحلية للمكون ---
+const currentStep = ref(1);
+const fileInput = ref<HTMLInputElement | null>(null);
+const { createListing, isSubmitting, error } = useListings();
+
+interface ImageFileWrapper {
+  file: File;
+  previewUrl: string;
+  isAnalyzing: boolean;
+  analysisResult: { suggestions: string[] } | null;
+}
+
+const imagesToUpload = ref<ImageFileWrapper[]>([]);
+const listingData = reactive<Omit<ListingData, 'id' | 'sellerId' | 'createdAt' | 'imageUrls'>>({
+  make: '',
+  model: '',
+  year: null,
+  price: null,
+  mileage: null,
+  description: '',
+  category: 'car'
+});
+
+// --- دوال التنقل بين الخطوات ---
+const nextStep = () => {
+  if (currentStep.value < 3) currentStep.value++;
+};
+const prevStep = () => {
+  if (currentStep.value > 1) currentStep.value--;
+};
+
+// --- دوال معالجة الصور ---
+const triggerFileInput = () => {
+  fileInput.value?.click();
+};
+
+const handleImageUpload = async (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (!target.files) return;
+
+  const files = Array.from(target.files);
+  for (const file of files) {
+    const imageWrapper: ImageFileWrapper = {
+      file,
+      previewUrl: URL.createObjectURL(file),
+      isAnalyzing: true,
+      analysisResult: null
+    };
+    imagesToUpload.value.push(imageWrapper);
+    analyzeImage(imageWrapper); // استدعاء دالة التحليل
+  }
+};
+
+const analyzeImage = async (imageWrapper: ImageFileWrapper) => {
+  const formData = new FormData();
+  formData.append('file', imageWrapper.file);
+
+  try {
+    // استدعاء الخدمة المصغرة لتحليل الصور
+    // تأكد من تغيير الرابط إلى رابط خدمتك المنشورة على Cloud Run
+    const response = await axios.post('https://image-analysis-service-xyz.a.run.app/analyze-image', formData);
+    imageWrapper.analysisResult = response.data;
+  } catch (err) {
+    console.error("Image analysis failed:", err);
+    imageWrapper.analysisResult = { suggestions: [t('analysis_failed')] };
+  } finally {
+    imageWrapper.isAnalyzing = false;
+  }
+};
+
+const removeImage = (index: number) => {
+  const image = imagesToUpload.value[index];
+  if (image) {
+    URL.revokeObjectURL(image.previewUrl);
+    imagesToUpload.value.splice(index, 1);
+  }
+};
+
+// --- دالة تقديم الإعلان ---
+const submitListing = async () => {
+  if (imagesToUpload.value.length === 0) {
+    alert(t('error_no_images'));
+    return;
+  }
+  const imageFiles = imagesToUpload.value.map(img => img.file);
+  await createListing(listingData, imageFiles);
+  if (!error.value) {
+    alert(t('listing_created_success'));
+    // يمكنك هنا إعادة توجيه المستخدم أو إعادة تعيين النموذج
+    currentStep.value = 1;
+    // ... إعادة تعيين باقي البيانات
+  } else {
+    alert(`${t('error_creating_listing')}: ${error.value}`);
+  }
+};
+</script>
+
+<style scoped>
+/* انماط مخصصة للمكون */
+.form-input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow;
+}
+.btn-primary {
+  @apply bg-blue-600 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 transition-colors;
+}
+.btn-secondary {
+  @apply bg-gray-200 text-gray-700 font-semibold px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors;
+}
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+</style>
+
+
+-2--------------------------------------------------------------------------------------
+
+import { ref } from 'vue';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage, auth } from '@/services/firebase/config'; // تأكد من أن مسار الإعدادات صحيح
+import type { ListingData } from '@/models/listing.models';
+
+export function useListings() {
+  const isSubmitting = ref(false);
+  const error = ref<string | null>(null);
+
+  /**
+   * دالة لرفع ملف واحد إلى Firebase Storage
+   * @param file - الملف المراد رفعه
+   * @returns {Promise<string>} - رابط تحميل الملف بعد الرفع
+   */
+  const uploadImage = async (file: File): Promise<string> => {
+    // إنشاء مسار فريد لكل صورة لمنع التصادم
+    const filePath = `listings/${auth.currentUser?.uid}/${Date.now()}_${file.name}`;
+    const fileRef = storageRef(storage, filePath);
+
+    await uploadBytes(fileRef, file);
+    const downloadUrl = await getDownloadURL(fileRef);
+    return downloadUrl;
+  };
+  
+  /**
+   * دالة لإنشاء إعلان جديد في Firestore
+   * @param listingData - بيانات الإعلان الأساسية من النموذج
+   * @param imageFiles - مصفوفة من ملفات الصور
+   */
+  const createListing = async (
+    listingData: Omit<ListingData, 'id' | 'sellerId' | 'createdAt' | 'imageUrls'>,
+    imageFiles: File[]
+  ) => {
+    if (!auth.currentUser) {
+      error.value = "User is not authenticated.";
+      return;
+    }
+
+    isSubmitting.value = true;
+    error.value = null;
+
+    try {
+      // 1. رفع جميع الصور بالتوازي للحصول على أداء أفضل
+      const uploadPromises = imageFiles.map(file => uploadImage(file));
+      const imageUrls = await Promise.all(uploadPromises);
+
+      // 2. تجميع بيانات الإعلان الكاملة
+      const newListing: Omit<ListingData, 'id'> = {
+        ...listingData,
+        imageUrls,
+        sellerId: auth.currentUser.uid,
+        createdAt: serverTimestamp(),
+        // تحويل الحقول الرقمية الفارغة إلى null لـ Firestore
+        year: listingData.year || null,
+        price: listingData.price || null,
+        mileage: listingData.mileage || null,
+      };
+
+      // 3. إضافة مستند جديد إلى مجموعة 'listings'
+      const listingsCollection = collection(db, 'listings');
+      await addDoc(listingsCollection, newListing);
+
+    } catch (e: any) {
+      console.error("Error creating listing:", e);
+      error.value = e.message || "An unknown error occurred while creating the listing.";
+    } finally {
+      isSubmitting.value = false;
+    }
+  };
+
+  // يمكن إضافة دوال أخرى هنا مثل getListings, getListingById, etc.
+
+  return {
+    isSubmitting,
+    error,
+    createListing
+  };
+}
+-2--------------------------------------------------------------------------------------
+import type { FieldValue } from 'firebase/firestore';
+
+// هذا الـ Interface يصف هيكل مستند الإعلان في قاعدة بيانات Firestore
+export interface ListingData {
+  id: string; // معرف المستند
+  make: string; // الشركة المصنعة
+  model: string; // الموديل
+  year: number | null; // سنة الصنع
+  price: number | null; // السعر
+  mileage: number | null; // الكيلومترات المقطوعة
+  description: string; // الوصف
+  category: 'car' | 'parts'; // الفئة: سيارة أو قطعة غيار
+  imageUrls: string[]; // مصفوفة من روابط الصور
+  sellerId: string; // معرف المستخدم (البائع)
+  createdAt: FieldValue; // تاريخ إنشاء الإعلان (חותם זמן الخادم)
+}
+-4--------------------------------------------------------------------------------------
+<template>
+  <div class="border rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 bg-white">
+    <div class="h-48 bg-gray-200">
+      <img
+        v-if="listing.imageUrls && listing.imageUrls.length > 0"
+        :src="listing.imageUrls[0]"
+        :alt="`${listing.make} ${listing.model}`"
+        class="w-full h-full object-cover"
+      />
+    </div>
+    <div class="p-4">
+      <h3 class="text-lg font-bold text-gray-800 truncate">{{ listing.make }} {{ listing.model }}</h3>
+      <p class="text-sm text-gray-500">{{ listing.year }} &bull; {{ listing.mileage?.toLocaleString() }} km</p>
+      <p class="text-xl font-semibold text-blue-600 mt-2">{{ listing.price?.toLocaleString() }} BGN</p>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { ListingData } from '@/models/listing.models';
+import type { PropType } from 'vue';
+
+defineProps({
+  listing: {
+    type: Object as PropType<ListingData>,
+    required: true
+  }
+});
+</script>
+-5--------------------------------------------------------------------------------------
+<template>
+  <div v-if="loading" class="text-center p-10">
+    <p>Loading listing details...</p>
+  </div>
+  <div v-else-if="error" class="text-center p-10 text-red-500">
+    <p>Error: {{ error }}</p>
+  </div>
+  <div v-else-if="listing" class="max-w-6xl mx-auto p-4 sm:p-6">
+    <!-- معرض الصور -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div class="col-span-1">
+        <img :src="mainImage" class="w-full h-96 object-cover rounded-lg shadow-md" />
+      </div>
+      <div class="col-span-1 grid grid-cols-3 gap-2">
+        <img 
+          v-for="url in listing.imageUrls" :key="url" 
+          :src="url" 
+          @click="mainImage = url"
+          class="w-full h-28 object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity"
+          :class="{'ring-2 ring-blue-500': mainImage === url}"
+        />
+      </div>
+    </div>
+    
+    <!-- التفاصيل -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h1 class="text-3xl font-bold text-gray-900">{{ listing.make }} {{ listing.model }}</h1>
+      <p class="text-2xl font-semibold text-blue-600 mt-2">{{ listing.price?.toLocaleString() }} BGN</p>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 border-t border-b py-4">
+        <div>
+          <p class="text-sm text-gray-500">Year</p>
+          <p class="font-semibold">{{ listing.year }}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Mileage</p>
+          <p class="font-semibold">{{ listing.mileage?.toLocaleString() }} km</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500">Category</p>
+          <p class="font-semibold capitalize">{{ listing.category }}</p>
+        </div>
+      </div>
+      
+      <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-2">Description</h2>
+        <p class="text-gray-700 leading-relaxed">{{ listing.description }}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/services/firebase/config';
+import type { ListingData } from '@/models/listing.models';
+
+const route = useRoute();
+const listing = ref<ListingData | null>(null);
+const mainImage = ref('');
+const loading = ref(true);
+const error = ref<string | null>(null);
+
+onMounted(async () => {
+  const listingId = route.params.id as string;
+  try {
+    const docRef = doc(db, 'listings', listingId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      listing.value = { id: docSnap.id, ...docSnap.data() } as ListingData;
+      if (listing.value.imageUrls && listing.value.imageUrls.length > 0) {
+        mainImage.value = listing.value.imageUrls[0];
+      }
+    } else {
+      throw new Error("Listing not found.");
+    }
+  } catch (e: any) {
+    error.value = e.message;
+  } finally {
+    loading.value = false;
+  }
+});
+</script>
+-6--------------------------------------------------------------------------------------
+# main.py for Image Analysis Microservice
+# يتطلب تثبيت: pip install fastapi uvicorn python-multipart opencv-python numpy
+
+from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+import cv2
+import numpy as np
+from pydantic import BaseModel
+from typing import List
+
+app = FastAPI()
+
+# --- إعدادات CORS للسماح بالطلبات من الواجهة الأمامية ---
+# في بيئة الإنتاج، يجب تحديد المصادر المسموح بها بدقة
+origins = [
+    "http://localhost:5173", # For local Vue dev server
+    "https://your-frontend-app-url.com",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# --- نماذج البيانات (Pydantic Models) ---
+class ImageAnalysis(BaseModel):
+    is_blurry: bool
+    is_dark: bool
+    suggestions: List[str]
+
+
+# --- الدوال المساعدة لتحليل الصور ---
+def analyze_image_clarity(image_bytes: bytes) -> bool:
+    """
+    تحلل الصورة لتحديد ما إذا كانت ضبابية.
+    تستخدم تباين خوارزمية لابلاسيان.
+    """
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # قيمة التباين، إذا كانت أقل من العتبة (e.g., 100) تعتبر ضبابية
+    fm = cv2.Laplacian(gray, cv2.CV_64F).var()
+    return fm < 100.0
+
+def analyze_image_brightness(image_bytes: bytes) -> bool:
+    """
+    تحلل الصورة لتحديد ما إذا كانت مظلمة.
+    """
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_GRAYSCALE)
+    # إذا كان متوسط ​​سطوع البكسل أقل من العتبة (e.g., 70) تعتبر مظلمة
+    return np.mean(img) < 70
+
+
+# --- نقطة النهاية (Endpoint) الرئيسية للخدمة ---
+@app.post("/analyze-image", response_model=ImageAnalysis)
+async def analyze_image(file: UploadFile = File(...)):
+    """
+    تستقبل ملف صورة، تحللها، وتعيد النتائج والاقتراحات.
+    """
+    contents = await file.read()
+    
+    is_blurry = analyze_image_clarity(contents)
+    is_dark = analyze_image_brightness(contents)
+    
+    suggestions = []
+    if is_blurry:
+        suggestions.append("Image appears blurry. Try taking a sharper photo.")
+    if is_dark:
+        suggestions.append("Image is too dark. Consider shooting in better light.")
+    
+    if not suggestions:
+        suggestions.append("Image quality looks good!")
+
+    return ImageAnalysis(
+        is_blurry=is_blurry,
+        is_dark=is_dark,
+        suggestions=suggestions,
+    )
+
+# لتشغيل الخدمة محلياً، استخدم الأمر: uvicorn main:app --reload
+
+
+
+
+
+
+
+

@@ -1,0 +1,1048 @@
+ العملة يورو الزاما 
+المكان جمهورية بلغاريا الزاما 
+اللغة : بلغاري و إنكليزي الزاما 
+لا يوجد اي كلمة عربية تعرض للناس ممكن ان تكون في الخلفية لأني عربي لكن كضهور فقط بلغاري وانكليزي 
+سوف تجد بعض الأشياء التي تخص العرب في الاكواد غيرها الى بلغاريا الزاما ….
+
+التطوير ….
+
+الجزء الثالث للنظام يجب ان بنفذ المشروع بتوافق مع الاكواد الموجودة والمشروع الحالي الموجود 
+نظام اختيار وتقييم السيارات المتقدم
+سأقوم بتطوير نظام متكامل لاختيار وتقييم السيارات مستوحى من موقع mobile.de، مع تحسينات لتتناسب مع غرض التقييم بدلاً من الشراء.
+
+التصميم المتكامل لنظام اختيار وتقييم السيارات
+html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام تقييم السيارات المتقدم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f3f4f6;
+            --gray: #9ca3af;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        /* Navigation */
+        nav {
+            background-color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background-color: var(--light);
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+        
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .filter-header h2 {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+        
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-group h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-group h3 i {
+            color: var(--primary);
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .filter-option:hover {
+            background-color: #f0f5ff;
+        }
+        
+        .filter-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+        
+        .filter-option label {
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .filter-range {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .range-inputs {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .range-inputs input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .range-slider {
+            width: 100%;
+            height: 5px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 5px;
+            outline: none;
+            margin: 1rem 0;
+        }
+        
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* Car Selection Grid */
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .car-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .car-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .car-image {
+            height: 180px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .car-image i {
+            font-size: 4rem;
+            color: #94a3b8;
+        }
+        
+        .car-details {
+            padding: 1.2rem;
+        }
+        
+        .car-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .car-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        
+        .car-spec {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .car-spec i {
+            color: var(--primary);
+        }
+        
+        .car-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+        
+        .car-action {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: #f0f5ff;
+        }
+        
+        /* Evaluation Section */
+        .evaluation-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+        
+        .eval-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .eval-header h2 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .eval-header p {
+            color: var(--gray);
+        }
+        
+        .eval-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-group label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-group select, .form-group input {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .form-full {
+            grid-column: 1 / -1;
+        }
+        
+        .eval-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-column ul li a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .car-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .eval-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-car"></i>
+                <h1>تقييم السيارات</h1>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="ابحث عن سيارة..." style="padding: 0.5rem; border-radius: 6px; border: none; width: 250px;">
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <div class="nav-tabs">
+                <div class="nav-tab active">جميع السيارات</div>
+                <div class="nav-tab">السيارات الجديدة</div>
+                <div class="nav-tab">السيارات المستعملة</div>
+                <div class="nav-tab">التقييم المتقدم</div>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-outline">مقارنة السيارات</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-header">
+                <h2>تصفية النتائج</h2>
+                <a href="#" style="color: var(--primary); text-decoration: none;">إعادة الضبط</a>
+            </div>
+
+            <!-- Brand Filter -->
+            <div class="filter-group">
+                <h3><i class="fas fa-tag"></i> العلامة التجارية</h3>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="checkbox" id="toyota">
+                        <label for="toyota">تويوتا</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="nissan">
+                        <label for="nissan">نيسان</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="hyundai">
+                        <label for="hyundai">هيونداي</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="kia">
+                        <label for="kia">كيا</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="bmw">
+                        <label for="bmw">بي إم دبليو</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="mercedes">
+                        <label for="mercedes">مرسيدس</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model Filter -->
+            <div class="filter-group">
+                <h3><i class="fas fa-car"></i> الموديل</h3>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="checkbox" id="camry">
+                        <label for="camry">كامري</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sunny">
+                        <label for="sunny">سنني</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="elantra">
+                        <label for="elantra">الانترا</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="sportage">
+                        <label for="sportage">سبورتاج</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Year Filter -->
+            <div class="filter-group">
+                <h3><i class="fas fa-calendar-alt"></i> السنة</h3>
+                <div class="filter-range">
+                    <div class="range-inputs">
+                        <input type="number" placeholder="من" min="1990" max="2023" value="2018">
+                        <span>إلى</span>
+                        <input type="number" placeholder="إلى" min="1990" max="2023" value="2023">
+                    </div>
+                    <input type="range" class="range-slider" min="1990" max="2023" value="2018">
+                </div>
+            </div>
+
+            <!-- Price Filter -->
+            <div class="filter-group">
+                <h3><i class="fas fa-tags"></i> السعر (ريال سعودي)</h3>
+                <div class="filter-range">
+                    <div class="range-inputs">
+                        <input type="number" placeholder="من" min="0" max="500000" value="30000">
+                        <span>إلى</span>
+                        <input type="number" placeholder="إلى" min="0" max="500000" value="150000">
+                    </div>
+                    <input type="range" class="range-slider" min="0" max="500000" value="30000">
+                </div>
+            </div>
+
+            <!-- Fuel Type Filter -->
+            <div class="filter-group">
+                <h3><i class="fas fa-gas-pump"></i> نوع الوقود</h3>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="checkbox" id="gasoline">
+                        <label for="gasoline">بنزين</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="diesel">
+                        <label for="diesel">ديزل</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="electric">
+                        <label for="electric">كهربائي</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="checkbox" id="hybrid">
+                        <label for="hybrid">هايبرد</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Car Grid -->
+        <div class="car-grid">
+            <!-- Car Card 1 -->
+            <div class="car-card fade-in">
+                <div class="car-image">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <div class="car-details">
+                    <h3 class="car-title">تويوتا كامري 2022</h3>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>2022</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>45,000 كم</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>بنزين</span>
+                        </div>
+                    </div>
+                    <p class="car-price">85,000 ر.س</p>
+                    <div class="car-action">
+                        <button class="btn btn-outline">المزيد</button>
+                        <button class="btn btn-primary">تقييم السيارة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Card 2 -->
+            <div class="car-card fade-in">
+                <div class="car-image">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <div class="car-details">
+                    <h3 class="car-title">هيونداي النترا 2021</h3>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>2021</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>60,000 كم</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>بنزين</span>
+                        </div>
+                    </div>
+                    <p class="car-price">65,000 ر.س</p>
+                    <div class="car-action">
+                        <button class="btn btn-outline">المزيد</button>
+                        <button class="btn btn-primary">تقييم السيارة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Card 3 -->
+            <div class="car-card fade-in">
+                <div class="car-image">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <div class="car-details">
+                    <h3 class="car-title">نيسان صني 2020</h3>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>2020</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>70,000 كم</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>بنزين</span>
+                        </div>
+                    </div>
+                    <p class="car-price">45,000 ر.س</p>
+                    <div class="car-action">
+                        <button class="btn btn-outline">المزيد</button>
+                        <button class="btn btn-primary">تقييم السيارة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Card 4 -->
+            <div class="car-card fade-in">
+                <div class="car-image">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <div class="car-details">
+                    <h3 class="car-title">كيا سبورتاج 2022</h3>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>2022</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>35,000 كم</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>بنزين</span>
+                        </div>
+                    </div>
+                    <p class="car-price">95,000 ر.س</p>
+                    <div class="car-action">
+                        <button class="btn btn-outline">المزيد</button>
+                        <button class="btn btn-primary">تقييم السيارة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Card 5 -->
+            <div class="car-card fade-in">
+                <div class="car-image">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <div class="car-details">
+                    <h3 class="car-title">بي إم دبليو 2021</h3>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>2021</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>40,000 كم</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>بنزين</span>
+                        </div>
+                    </div>
+                    <p class="car-price">180,000 ر.س</p>
+                    <div class="car-action">
+                        <button class="btn btn-outline">المزيد</button>
+                        <button class="btn btn-primary">تقييم السيارة</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Car Card 6 -->
+            <div class="car-card fade-in">
+                <div class="car-image">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <div class="car-details">
+                    <h3 class="car-title">مرسيدس 2020</h3>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>2020</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>50,000 كم</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-gas-pump"></i>
+                            <span>بنزين</span>
+                        </div>
+                    </div>
+                    <p class="car-price">200,000 ر.س</p>
+                    <div class="car-action">
+                        <button class="btn btn-outline">المزيد</button>
+                        <button class="btn btn-primary">تقييم السيارة</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evaluation Section -->
+    <div class="container">
+        <div class="evaluation-section">
+            <div class="eval-header">
+                <h2>التقييم المتقدم للسيارة</h2>
+                <p>املأ التفاصيل للحصول على تقييم دقيق لسيارتك</p>
+            </div>
+            <div class="eval-form">
+                <div class="form-group">
+                    <label for="car-brand">العلامة التجارية</label>
+                    <select id="car-brand">
+                        <option value="">اختر العلامة التجارية</option>
+                        <option value="toyota">تويوتا</option>
+                        <option value="nissan">نيسان</option>
+                        <option value="hyundai">هيونداي</option>
+                        <option value="kia">كيا</option>
+                        <option value="bmw">بي إم دبليو</option>
+                        <option value="mercedes">مرسيدس</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="car-model">الموديل</label>
+                    <select id="car-model">
+                        <option value="">اختر الموديل</option>
+                        <option value="camry">كامري</option>
+                        <option value="sunny">سنني</option>
+                        <option value="elantra">الانترا</option>
+                        <option value="sportage">سبورتاج</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="car-year">سنة الصنع</label>
+                    <select id="car-year">
+                        <option value="">اختر السنة</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="car-fuel">نوع الوقود</label>
+                    <select id="car-fuel">
+                        <option value="">اختر نوع الوقود</option>
+                        <option value="gasoline">بنزين</option>
+                        <option value="diesel">ديزل</option>
+                        <option value="electric">كهربائي</option>
+                        <option value="hybrid">هايبرد</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="car-mileage">المسافة المقطوعة (كم)</label>
+                    <input type="number" id="car-mileage" placeholder="أدخل المسافة المقطوعة">
+                </div>
+                <div class="form-group">
+                    <label for="car-condition">الحالة العامة</label>
+                    <select id="car-condition">
+                        <option value="">اختر الحالة العامة</option>
+                        <option value="excellent">ممتازة</option>
+                        <option value="very-good">جيدة جداً</option>
+                        <option value="good">جيدة</option>
+                        <option value="fair">متوسطة</option>
+                    </select>
+                </div>
+                <div class="form-group form-full">
+                    <label for="car-features">المميزات الإضافية</label>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem;">
+                        <div>
+                            <input type="checkbox" id="feature1">
+                            <label for="feature1">تكييف</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="feature2">
+                            <label for="feature2">ناقل حركة أوتوماتيك</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="feature3">
+                            <label for="feature3">وسائد هوائية</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="feature4">
+                            <label for="feature4">نظام ملاحة</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="feature5">
+                            <label for="feature5">كاميرا خلفية</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="feature6">
+                            <label for="feature6">مثبت سرعة</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="eval-actions">
+                    <button class="btn btn-primary" style="padding: 0.75rem 2rem;">تقييم السيارة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>عن التطبيق</h3>
+                    <ul>
+                        <li><a href="#">عن الشركة</a></li>
+                        <li><a href="#">كيف يعمل</a></li>
+                        <li><a href="#">الأسئلة الشائعة</a></li>
+                        <li><a href="#">اتصل بنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>السيارات</h3>
+                    <ul>
+                        <li><a href="#">السيارات الجديدة</a></li>
+                        <li><a href="#">السيارات المستعملة</a></li>
+                        <li><a href="#">أفضل العروض</a></li>
+                        <li><a href="#">المقارنة</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>موارد</h3>
+                    <ul>
+                        <li><a href="#">دليل الأسعار</a></li>
+                        <li><a href="#">دليل الشراء</a></li>
+                        <li><a href="#">مقالات وتقارير</a></li>
+                        <li><a href="#">أخبار السيارات</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>تابعنا</h3>
+                    <ul>
+                        <li><a href="#">فيسبوك</a></li>
+                        <li><a href="#">تويتر</a></li>
+                        <li><a href="#">إنستغرام</a></li>
+                        <li><a href="#">يوتيوب</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 نظام تقييم السيارات المتقدم. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple animation for elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            fadeElements.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.opacity = 1;
+                }, 100 * index);
+            });
+            
+            // Range slider functionality
+            const rangeSliders = document.querySelectorAll('.range-slider');
+            
+            rangeSliders.forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const inputs = this.parentElement.querySelectorAll('input[type="number"]');
+                    inputs[0].value = this.value;
+                });
+            });
+            
+            // Filter options functionality
+            const filterOptions = document.querySelectorAll('.filter-option');
+            
+            filterOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                    
+                    if (checkbox.checked) {
+                        this.style.backgroundColor = '#f0f5ff';
+                    } else {
+                        this.style.backgroundColor = 'transparent';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+ميزات النظام المتقدم
+واجهة مستخدم عربية متكاملة مع دعم كامل للغة العربية والتخطيط من اليمين لليسار.
+
+نظام تصفية متقدم يشمل:
+
+تصفية حسب العلامة التجارية (تويوتا، نيسان، هيونداي، إلخ)
+
+تصفية حسب الموديل
+
+تصفية حسب السنة ونطاق الأسعار
+
+تصفية حسب نوع الوقود (بنزين، ديزل، كهربائي، هايبرد)
+
+عرض السيارات بطريقة بطاقات مع:
+
+صور توضيحية للسيارات
+
+المعلومات الأساسية (السنة، المسافة المقطوعة، نوع الوقود)
+
+السعر وزر التقييم
+
+نظام التقييم المتقدم الذي يشمل:
+
+اختيار العلامة التجارية والموديل
+
+تحديد سنة الصنع ونوع الوقود
+
+إدخال المسافة المقطوعة والحالة العامة
+
+اختيار المميزات الإضافية
+
+تصميم متجاوب يعمل على جميع أحجام الشاشات من الجوال إلى Desktop.
+
+تجربة مستخدم محسنة مع:
+
+تأثيرات بصرية عند التمرير
+
+ألوان متناسقة وواضحة
+
+تخطيط سهل الاستخدام
+
+هذا النظام يقدم واجهة مستخدم بديهية وشاملة لاختيار وتقييم السيارات، مع التركيز على تجربة المستخدم العربية وتقديم جميع الخيارات اللازمة لتقييم دقيق للسيارة.
+
