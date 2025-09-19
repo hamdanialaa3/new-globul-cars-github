@@ -14,12 +14,12 @@ import { BULGARIAN_CONFIG } from '../config/bulgarian-config';
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || BULGARIAN_CONFIG.api.firebase.apiKey,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || BULGARIAN_CONFIG.api.firebase.authDomain,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || BULGARIAN_CONFIG.api.firebase.projectId,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || BULGARIAN_CONFIG.api.firebase.storageBucket,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || BULGARIAN_CONFIG.api.firebase.messagingSenderId,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID || BULGARIAN_CONFIG.api.firebase.appId
+  apiKey: process.env.VITE_FIREBASE_API_KEY || BULGARIAN_CONFIG.api.firebase.apiKey,
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || BULGARIAN_CONFIG.api.firebase.authDomain,
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID || BULGARIAN_CONFIG.api.firebase.projectId,
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || BULGARIAN_CONFIG.api.firebase.storageBucket,
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || BULGARIAN_CONFIG.api.firebase.messagingSenderId,
+  appId: process.env.VITE_FIREBASE_APP_ID || BULGARIAN_CONFIG.api.firebase.appId
 };
 
 export interface NotificationAction {

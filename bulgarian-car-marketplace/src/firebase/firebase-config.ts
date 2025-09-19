@@ -29,7 +29,7 @@ export const storage = getStorage(app);
 export const functions = getFunctions(app);
 
 // Initialize Analytics (only in production and if measurement ID is provided)
-const analytics: Analytics | null = (typeof window !== 'undefined' && process.env.REACT_APP_FIREBASE_MEASUREMENT_ID)
+const analytics: Analytics | null = (typeof window !== 'undefined' && process.env.VITE_FIREBASE_MEASUREMENT_ID)
   ? (() => {
       try {
         return getAnalytics(app);
