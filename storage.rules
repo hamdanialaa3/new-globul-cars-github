@@ -148,33 +148,5 @@ service firebase.storage {
       // Allow delete for admins only
       allow delete: if isAdmin();
     }
-
-    // Bulgarian-specific file naming validation
-    function isValidBulgarianFileName(fileName) {
-      return fileName.matches('^[a-zA-Z0-9а-яА-Я\\-_\\.]+$') &&
-             !fileName.matches('.*\\.\\..*'); // Prevent directory traversal
-    }
-
-    // File size limits based on type
-    function checkFileSize() {
-      let maxSize = 10 * 1024 * 1024; // 10MB default
-
-      if (request.resource.contentType.matches('image/.*')) {
-        maxSize = 5 * 1024 * 1024; // 5MB for images
-      } else if (request.resource.contentType.matches('video/.*')) {
-        maxSize = 50 * 1024 * 1024; // 50MB for videos
-      } else if (request.resource.contentType.matches('application/.*')) {
-        maxSize = 10 * 1024 * 1024; // 10MB for documents
-      }
-
-      return request.resource.size <= maxSize;
-    }
-
-    // Rate limiting helper (basic implementation)
-    function checkUploadRate() {
-      // This is a simplified rate limit check
-      // In production, you might want to use Firestore to track upload counts
-      return true; // Allow uploads for now
-    }
   }
 }

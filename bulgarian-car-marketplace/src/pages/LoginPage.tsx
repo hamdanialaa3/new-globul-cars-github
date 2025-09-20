@@ -6,15 +6,23 @@ import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTranslation } from '../hooks/useTranslation';
 import { bulgarianAuthService } from '../firebase';
+import Header from '../components/Header';
 
 // Styled Components
 const LoginContainer = styled.div`
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  padding: ${({ theme }) => theme.spacing['2xl']};
+  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary.main} 0%, ${({ theme }) => theme.colors.primary.dark} 100%);
+`;
+
+const LoginContent = styled.div`
+  flex: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
   padding: ${({ theme }) => theme.spacing['2xl']};
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors.primary.main} 0%, ${({ theme }) => theme.colors.primary.dark} 100%);
 `;
 
 const LoginCard = styled.div`
@@ -38,7 +46,7 @@ const LoginCard = styled.div`
   }
 `;
 
-const Header = styled.div`
+const LoginHeader = styled.div`
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing['3xl']};
 
@@ -207,27 +215,6 @@ const Links = styled.div`
   }
 `;
 
-const LanguageSelector = styled.div`
-  position: absolute;
-  top: ${({ theme }) => theme.spacing.lg};
-  right: ${({ theme }) => theme.spacing.lg};
-
-  select {
-    padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
-    border: 1px solid ${({ theme }) => theme.colors.grey[300]};
-    border-radius: ${({ theme }) => theme.borderRadius.sm};
-    background: ${({ theme }) => theme.colors.background.paper};
-    font-size: ${({ theme }) => theme.typography.fontSize.sm};
-    color: ${({ theme }) => theme.colors.text.secondary};
-    cursor: pointer;
-
-    &:focus {
-      outline: none;
-      border-color: ${({ theme }) => theme.colors.primary.main};
-    }
-  }
-`;
-
 // Login Page Component
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();
@@ -359,21 +346,16 @@ const LoginPage: React.FC = () => {
 
   return (
     <LoginContainer>
-      <LoginCard>
-        {/* Language Selector */}
-        <LanguageSelector>
-          <select defaultValue="bg">
-            <option value="bg">🇧🇬 Български</option>
-            <option value="en">🇺🇸 English</option>
-          </select>
-        </LanguageSelector>
+      <Header />
+      <LoginContent>
+        <LoginCard>
 
-        {/* Header */}
-        <Header>
-          <span className="logo">🚗</span>
-          <h1>{t('login.title')}</h1>
-          <p>{t('login.subtitle')}</p>
-        </Header>
+          {/* Header */}
+          <LoginHeader>
+            <span className="logo">🚗 Globul Cars</span>
+            <h1>{t('login.title')}</h1>
+            <p>{t('login.subtitle')}</p>
+          </LoginHeader>
 
         {/* Form */}
         <Form onSubmit={handleLogin}>
@@ -437,7 +419,7 @@ const LoginPage: React.FC = () => {
             onClick={handleGoogleLogin}
             disabled={socialLoading !== null}
           >
-            <span className="icon">🌐</span>
+            <span className="icon">G</span>
             {socialLoading === 'google' ? t('login.signingIn') : t('login.continueWithGoogle')}
           </SocialLoginButton>
 
@@ -447,7 +429,7 @@ const LoginPage: React.FC = () => {
             onClick={handleFacebookLogin}
             disabled={socialLoading !== null}
           >
-            <span className="icon">📘</span>
+            <span className="icon">f</span>
             {socialLoading === 'facebook' ? t('login.signingIn') : t('login.continueWithFacebook')}
           </SocialLoginButton>
         </div>
@@ -463,6 +445,7 @@ const LoginPage: React.FC = () => {
           </Link>
         </Links>
       </LoginCard>
+      </LoginContent>
     </LoginContainer>
   );
 };

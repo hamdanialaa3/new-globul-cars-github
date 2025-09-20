@@ -1,9 +1,6 @@
 // src/locales/translations.ts
-// Bulgarian and English Translations
-
 export const translations = {
   bg: {
-    // Navigation
     nav: {
       home: 'Начало',
       cars: 'Коли',
@@ -12,55 +9,49 @@ export const translations = {
       contact: 'Контакт',
       login: 'Вход',
       register: 'Регистрация',
-      logout: 'Изход',
-      profile: 'Профил',
-      messages: 'Съобщения',
-      myCars: 'Моите коли',
-      favorites: 'Любими',
-      settings: 'Настройки',
-      dashboard: 'Табло'
+      logout: 'Изход'
     },
-
-    // Common
-    common: {
-      loading: 'Зареждане...',
-      error: 'Грешка',
-      success: 'Успех',
-      save: 'Запази',
-      cancel: 'Отказ',
-      delete: 'Изтрий',
-      edit: 'Редактирай',
-      search: 'Търси',
-      filter: 'Филтрирай',
-      sort: 'Сортирай',
-      price: 'Цена',
-      location: 'Местоположение',
-      description: 'Описание',
-      photos: 'Снимки',
-      contact: 'Контакт',
-      message: 'Съобщение',
-      send: 'Изпрати',
-      back: 'Назад',
-      next: 'Напред',
-      previous: 'Предишен',
-      close: 'Затвори'
+    login: {
+      title: 'Вход',
+      subtitle: 'Влезте в акаунта си',
+      email: 'Имейл',
+      emailPlaceholder: 'Имейл адрес',
+      password: 'Парола',
+      passwordPlaceholder: 'Парола',
+      signIn: 'Вход',
+      signingIn: 'Влизане...',
+      or: 'или',
+      continueWithGoogle: 'Google',
+      continueWithFacebook: 'Facebook',
+      forgotPassword: 'Забравена парола?',
+      createAccount: 'Създай акаунт'
     },
-
-    // PWA
-    pwa: {
-      installTitle: 'Инсталирайте Globul Cars',
-      installDesc: 'Добавете приложението на началния си екран за по-бърз достъп и офлайн функционалност',
-      install: 'Инсталирай',
-      offline: 'Нямате интернет връзка',
-      offlineDesc: 'Работете офлайн с ограничени функции',
-      online: 'Връзката е възстановена',
-      installPrompt: 'Инсталирайте приложението за по-добро изживяване',
-      updateAvailable: 'Налична е нова версия',
-      updateNow: 'Актуализирай сега'
+    register: {
+      title: 'Регистрация',
+      subtitle: 'Създайте акаунт',
+      firstName: 'Име',
+      firstNamePlaceholder: 'Име',
+      lastName: 'Фамилия',
+      lastNamePlaceholder: 'Фамилия',
+      email: 'Имейл',
+      emailPlaceholder: 'Имейл адрес',
+      password: 'Парола',
+      passwordPlaceholder: 'Парола',
+      confirmPassword: 'Потвърдете парола',
+      confirmPasswordPlaceholder: 'Потвърдете парола',
+      city: 'Град',
+      cityPlaceholder: 'Град',
+      acceptTerms: 'Приемам',
+      termsLink: 'условията',
+      createAccount: 'Регистрация',
+      creatingAccount: 'Създаване...',
+      or: 'или',
+      continueWithGoogle: 'Google',
+      continueWithFacebook: 'Facebook',
+      alreadyHaveAccount: 'Имате акаунт? Влезте тук'
     }
   },
   en: {
-    // Navigation
     nav: {
       home: 'Home',
       cars: 'Cars',
@@ -69,54 +60,46 @@ export const translations = {
       contact: 'Contact',
       login: 'Login',
       register: 'Register',
-      logout: 'Logout',
-      profile: 'Profile',
-      messages: 'Messages',
-      myCars: 'My Cars',
-      favorites: 'Favorites',
-      settings: 'Settings',
-      dashboard: 'Dashboard'
+      logout: 'Logout'
     },
-
-    // Common
-    common: {
-      loading: 'Loading...',
-      error: 'Error',
-      success: 'Success',
-      save: 'Save',
-      cancel: 'Cancel',
-      delete: 'Delete',
-      edit: 'Edit',
-      search: 'Search',
-      filter: 'Filter',
-      sort: 'Sort',
-      price: 'Price',
-      location: 'Location',
-      description: 'Description',
-      photos: 'Photos',
-      contact: 'Contact',
-      message: 'Message',
-      send: 'Send',
-      back: 'Back',
-      next: 'Next',
-      previous: 'Previous',
-      close: 'Close'
+    login: {
+      title: 'Sign In',
+      subtitle: 'Sign in to your account',
+      email: 'Email',
+      emailPlaceholder: 'Email address',
+      password: 'Password',
+      passwordPlaceholder: 'Password',
+      signIn: 'Sign In',
+      signingIn: 'Signing In...',
+      or: 'or',
+      continueWithGoogle: 'Google',
+      continueWithFacebook: 'Facebook',
+      forgotPassword: 'Forgot Password?',
+      createAccount: 'Create Account'
     },
-
-    // PWA
-    pwa: {
-      installTitle: 'Install Globul Cars',
-      installDesc: 'Add the app to your home screen for faster access and offline functionality',
-      install: 'Install',
-      offline: 'No internet connection',
-      offlineDesc: 'Work offline with limited features',
-      online: 'Connection restored',
-      installPrompt: 'Install the app for a better experience',
-      updateAvailable: 'New version available',
-      updateNow: 'Update now'
+    register: {
+      title: 'Sign Up',
+      subtitle: 'Create your account',
+      firstName: 'First Name',
+      firstNamePlaceholder: 'First Name',
+      lastName: 'Last Name',
+      lastNamePlaceholder: 'Last Name',
+      email: 'Email',
+      emailPlaceholder: 'Email address',
+      password: 'Password',
+      passwordPlaceholder: 'Password',
+      confirmPassword: 'Confirm Password',
+      confirmPasswordPlaceholder: 'Confirm Password',
+      city: 'City',
+      cityPlaceholder: 'City',
+      acceptTerms: 'I accept the',
+      termsLink: 'terms',
+      createAccount: 'Sign Up',
+      creatingAccount: 'Creating...',
+      or: 'or',
+      continueWithGoogle: 'Google',
+      continueWithFacebook: 'Facebook',
+      alreadyHaveAccount: 'Have an account? Sign in here'
     }
   }
 };
-
-export type TranslationKey = keyof typeof translations.bg;
-export type BulgarianLanguage = 'bg' | 'en';

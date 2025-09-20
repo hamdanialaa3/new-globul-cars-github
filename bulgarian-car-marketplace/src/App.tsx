@@ -86,10 +86,10 @@ const PageLoader: React.FC = () => (
 // App Component
 const App: React.FC = () => {
   return (
-    <ErrorBoundary>
-      <SkipNavigation />
-      <ThemeProvider theme={bulgarianTheme}>
+    <ThemeProvider theme={bulgarianTheme}>
+      <ErrorBoundary>
         <TranslationProvider>
+          <SkipNavigation />
           <GlobalStyles />
           <Router>
             <AnalyticsTracker />
@@ -262,10 +262,12 @@ const App: React.FC = () => {
                 }
               />
             </Routes>
-            </Suspense>
-          </Router>
+          </Suspense>
+        </Router>
         </TranslationProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </ThemeProvider>
   );
-};export default App;
+};
+
+export default App;

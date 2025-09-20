@@ -6,26 +6,39 @@ import { useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTranslation } from '../hooks/useTranslation';
 import { bulgarianAuthService } from '../firebase';
+import Header from '../components/Header';
 
 // Styled Components
 const RegisterContainer = styled.div`
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  padding: ${({ theme }) => theme.spacing['2xl']};
+  background: linear-gradient(135deg, ${({ theme }) => theme.colors.secondary.main} 0%, ${({ theme }) => theme.colors.secondary.dark} 100%);
+`;
+
+const RegisterContent = styled.div`
+  flex: 1;
+  display: flex;
   align-items: center;
   justify-content: center;
   padding: ${({ theme }) => theme.spacing['2xl']};
-  background: linear-gradient(135deg, ${({ theme }) => theme.colors.secondary.main} 0%, ${({ theme }) => theme.colors.secondary.dark} 100%);
 `;
 
 const RegisterCard = styled.div`
   background: ${({ theme }) => theme.colors.background.paper};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: ${({ theme }) => theme.spacing['4xl']};
+  padding: ${({ theme }) => theme.spacing['3xl']};
   box-shadow: ${({ theme }) => theme.shadows.xl};
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: ${({ theme }) => theme.spacing['2xl']};
+    max-width: 95%;
+  }
 
   &::before {
     content: '';
@@ -38,7 +51,7 @@ const RegisterCard = styled.div`
   }
 `;
 
-const Header = styled.div`
+const RegisterHeader = styled.div`
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing['3xl']};
 
@@ -72,10 +85,11 @@ const Form = styled.form`
 const FormGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: ${({ theme }) => theme.spacing.lg};
+  gap: ${({ theme }) => theme.spacing.md};
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: ${({ theme }) => theme.spacing.sm};
   }
 `;
 
@@ -88,6 +102,9 @@ const FormGroup = styled.div`
     font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
     color: ${({ theme }) => theme.colors.text.primary};
     font-size: ${({ theme }) => theme.typography.fontSize.sm};
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   input, select {
@@ -127,6 +144,7 @@ const CheckboxGroup = styled.div`
     height: 18px;
     margin-top: 2px;
     accent-color: ${({ theme }) => theme.colors.secondary.main};
+    flex-shrink: 0;
   }
 
   label {
@@ -134,6 +152,7 @@ const CheckboxGroup = styled.div`
     color: ${({ theme }) => theme.colors.text.secondary};
     line-height: 1.4;
     cursor: pointer;
+    flex: 1;
 
     a {
       color: ${({ theme }) => theme.colors.secondary.main};
@@ -144,6 +163,14 @@ const CheckboxGroup = styled.div`
         text-decoration: underline;
       }
     }
+  }
+
+  .error {
+    color: ${({ theme }) => theme.colors.error};
+    font-size: ${({ theme }) => theme.typography.fontSize.xs};
+    margin-top: ${({ theme }) => theme.spacing.xs};
+    display: block;
+    width: 100%;
   }
 `;
 
@@ -199,7 +226,7 @@ const SocialRegisterButton = styled.button<{ provider: 'google' | 'facebook' }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: ${({ theme }) => theme.spacing.md};
+  gap: ${({ theme }) => theme.spacing.sm};
   padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
   border: 2px solid ${({ theme, provider }) =>
     provider === 'google' ? '#4285f4' : '#1877f2'};
@@ -208,7 +235,7 @@ const SocialRegisterButton = styled.button<{ provider: 'google' | 'facebook' }>`
   color: white;
   border-radius: ${({ theme }) => theme.borderRadius.md};
   font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  font-size: ${({ theme }) => theme.typography.fontSize.base};
+  font-size: ${({ theme }) => theme.typography.fontSize.sm};
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   width: 100%;
@@ -221,6 +248,7 @@ const SocialRegisterButton = styled.button<{ provider: 'google' | 'facebook' }>`
 
   .icon {
     font-size: ${({ theme }) => theme.typography.fontSize.lg};
+    font-weight: bold;
   }
 `;
 
@@ -239,27 +267,6 @@ const Links = styled.div`
     &:hover {
       color: ${({ theme }) => theme.colors.secondary.dark};
       text-decoration: underline;
-    }
-  }
-`;
-
-const LanguageSelector = styled.div`
-  position: absolute;
-  top: ${({ theme }) => theme.spacing.lg};
-  right: ${({ theme }) => theme.spacing.lg};
-
-  select {
-    padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
-    border: 1px solid ${({ theme }) => theme.colors.grey[300]};
-    border-radius: ${({ theme }) => theme.borderRadius.sm};
-    background: ${({ theme }) => theme.colors.background.paper};
-    font-size: ${({ theme }) => theme.typography.fontSize.sm};
-    color: ${({ theme }) => theme.colors.text.secondary};
-    cursor: pointer;
-
-    &:focus {
-      outline: none;
-      border-color: ${({ theme }) => theme.colors.secondary.main};
     }
   }
 `;
@@ -405,7 +412,7 @@ const RegisterPage: React.FC = () => {
             region: formData.region,
             postalCode: ''
           },
-          preferredLanguage: formData.preferredLanguage as 'bg' | 'en' as 'bg' | 'en'
+          preferredLanguage: formData.preferredLanguage as 'bg' | 'en'
         }
       );
 
@@ -465,21 +472,16 @@ const RegisterPage: React.FC = () => {
 
   return (
     <RegisterContainer>
-      <RegisterCard>
-        {/* Language Selector */}
-        <LanguageSelector>
-          <select defaultValue="bg">
-            <option value="bg">🇧🇬 Български</option>
-            <option value="en">🇺🇸 English</option>
-          </select>
-        </LanguageSelector>
+      <Header />
+      <RegisterContent>
+        <RegisterCard>
 
-        {/* Header */}
-        <Header>
-          <span className="logo">🚗</span>
-          <h1>{t('register.title')}</h1>
-          <p>{t('register.subtitle')}</p>
-        </Header>
+          {/* Header */}
+          <RegisterHeader>
+            <span className="logo">🚗 Globul Cars</span>
+            <h1>{t('register.title')}</h1>
+            <p>{t('register.subtitle')}</p>
+          </RegisterHeader>
 
         {/* Form */}
         <Form onSubmit={handleRegister}>
@@ -667,7 +669,7 @@ const RegisterPage: React.FC = () => {
             onClick={handleGoogleRegister}
             disabled={socialLoading !== null}
           >
-            <span className="icon">🌐</span>
+            <span className="icon">G</span>
             {socialLoading === 'google' ? t('register.creatingAccount') : t('register.continueWithGoogle')}
           </SocialRegisterButton>
 
@@ -677,7 +679,7 @@ const RegisterPage: React.FC = () => {
             onClick={handleFacebookRegister}
             disabled={socialLoading !== null}
           >
-            <span className="icon">📘</span>
+            <span className="icon">f</span>
             {socialLoading === 'facebook' ? t('register.creatingAccount') : t('register.continueWithFacebook')}
           </SocialRegisterButton>
         </div>
@@ -689,6 +691,7 @@ const RegisterPage: React.FC = () => {
           </Link>
         </Links>
       </RegisterCard>
+      </RegisterContent>
     </RegisterContainer>
   );
 };

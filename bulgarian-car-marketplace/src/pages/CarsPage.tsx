@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTranslation } from '../hooks/useTranslation';
 import { bulgarianCarService, BulgarianCar, CarSearchFilters } from '../firebase';
+import { CAR_MAKES, YEARS_OPTIONS } from '../constants/carMakes';
 import AdvancedSearch from '../components/AdvancedSearch';
 
 // Styled Components
@@ -276,7 +277,29 @@ const CarsPage: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [isAdvancedSearchExpanded, setIsAdvancedSearchExpanded] = useState(false);
 
-  // Load cars
+// Generate years array from 1900 to 2025
+// const YEARS_OPTIONS = (() => {
+//   const years = [];
+//   for (let year = 2025; year >= 1900; year--) {
+//     years.push(year);
+//   }
+//   return years;
+// })();
+
+// Comprehensive car makes list - Updated with complete list
+// const CAR_MAKES = [
+//   'Abarth', 'Acura', 'Alfa Romeo', 'Alpine', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Brilliance', 'Bugatti',
+//   'Buick', 'BYD', 'Cadillac', 'Changan', 'Chery', 'Chevrolet', 'Chrysler', 'Citroën', 'Cupra', 'Dacia',
+//   'Daewoo', 'Daihatsu', 'Dodge', 'Dongfeng', 'DS Automobiles', 'Exeed', 'Ferrari', 'Fiat', 'Fisker', 'Ford',
+//   'Forthing', 'GAZ', 'Geely', 'Genesis', 'GMC', 'Great Wall', 'Haval', 'Honda', 'Hongqi', 'Hummer',
+//   'Hyundai', 'Infiniti', 'Iran Khodro', 'Isuzu', 'Iveco', 'Jaguar', 'JAC', 'Jeep', 'Jetour', 'Kia',
+//   'Koenigsegg', 'Lada', 'Lamborghini', 'Lancia', 'Land Rover', 'Leapmotor', 'Lexus', 'Lincoln', 'Lotus', 'Lucid Motors',
+//   'MAN', 'Mahindra', 'Maserati', 'Maxus', 'Maybach', 'Mazda', 'McLaren', 'Mercedes-Benz', 'MG', 'Mini',
+//   'Mitsubishi', 'Moskvitch', 'NIO', 'Nissan', 'Opel', 'Pagani', 'Peugeot', 'Polestar', 'Pontiac', 'Porsche',
+//   'Praga', 'RAM', 'Renault', 'Rimac', 'Rinspeed', 'Rolls-Royce', 'Rover', 'Saab', 'Saipa', 'Scania',
+//   'SEAT', 'Seres', 'Sin Cars', 'Skoda', 'Smart', 'SsangYong', 'Subaru', 'Suzuki', 'Tata', 'Tesla',
+//   'Toyota', 'Tatra', 'TVR', 'UAZ', 'Volkswagen', 'Volvo', 'Voyah', 'Wiesmann', 'Xpeng', 'Zeekr'
+// ];  // Load cars
   const loadCars = useCallback(async () => {
     try {
       setLoading(true);
@@ -349,31 +372,26 @@ const CarsPage: React.FC = () => {
                 onChange={(e) => handleFilterChange('make', e.target.value)}
               >
                 <option value="">{t('cars.filters.allMakes')}</option>
-                <option value="BMW">BMW</option>
-                <option value="Mercedes-Benz">Mercedes-Benz</option>
-                <option value="Audi">Audi</option>
-                <option value="Volkswagen">Volkswagen</option>
-                <option value="Toyota">Toyota</option>
-                <option value="Honda">Honda</option>
-                <option value="Ford">Ford</option>
-                <option value="Opel">Opel</option>
-                <option value="Renault">Renault</option>
-                <option value="Peugeot">Peugeot</option>
+                {CAR_MAKES.map((make) => (
+                  <option key={make} value={make}>
+                    {make}
+                  </option>
+                ))}
               </select>
             </FilterGroup>
 
             <FilterGroup>
-              <label>{t('cars.filters.priceRange')}</label>
+              <label>{t('cars.filters.priceRange')} (€)</label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input
                   type="number"
-                  placeholder={t('cars.filters.minPrice')}
+                  placeholder={t('cars.filters.fromPrice')}
                   value={filters.minPrice || ''}
                   onChange={(e) => handleFilterChange('minPrice', parseInt(e.target.value) || undefined)}
                 />
                 <input
                   type="number"
-                  placeholder={t('cars.filters.maxPrice')}
+                  placeholder={t('cars.filters.toPrice')}
                   value={filters.maxPrice || ''}
                   onChange={(e) => handleFilterChange('maxPrice', parseInt(e.target.value) || undefined)}
                 />
@@ -392,24 +410,42 @@ const CarsPage: React.FC = () => {
                 <option value="electric">{t('cars.fuelTypes.electric')}</option>
                 <option value="hybrid">{t('cars.fuelTypes.hybrid')}</option>
                 <option value="gas">{t('cars.fuelTypes.gas')}</option>
+                <option value="lpg">{t('cars.fuelTypes.lpg')}</option>
+                <option value="cng">{t('cars.fuelTypes.cng')}</option>
+                <option value="hydrogen">{t('cars.fuelTypes.hydrogen')}</option>
+                <option value="ethanol">{t('cars.fuelTypes.ethanol')}</option>
+                <option value="biodiesel">{t('cars.fuelTypes.biodiesel')}</option>
+                <option value="other">{t('cars.fuelTypes.other')}</option>
               </select>
             </FilterGroup>
 
             <FilterGroup>
               <label>{t('cars.filters.year')}</label>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <input
-                  type="number"
-                  placeholder={t('cars.filters.minYear')}
+                <select
                   value={filters.minYear || ''}
-                  onChange={(e) => handleFilterChange('minYear', parseInt(e.target.value) || undefined)}
-                />
-                <input
-                  type="number"
-                  placeholder={t('cars.filters.maxYear')}
+                  onChange={(e) => handleFilterChange('minYear', e.target.value ? parseInt(e.target.value) : undefined)}
+                  style={{ flex: 1 }}
+                >
+                  <option value="">{t('cars.filters.fromYear')}</option>
+                  {YEARS_OPTIONS.map((year) => (
+                    <option key={`min-${year}`} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+                <select
                   value={filters.maxYear || ''}
-                  onChange={(e) => handleFilterChange('maxYear', parseInt(e.target.value) || undefined)}
-                />
+                  onChange={(e) => handleFilterChange('maxYear', e.target.value ? parseInt(e.target.value) : undefined)}
+                  style={{ flex: 1 }}
+                >
+                  <option value="">{t('cars.filters.toYear')}</option>
+                  {YEARS_OPTIONS.map((year) => (
+                    <option key={`max-${year}`} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
               </div>
             </FilterGroup>
           </FiltersGrid>

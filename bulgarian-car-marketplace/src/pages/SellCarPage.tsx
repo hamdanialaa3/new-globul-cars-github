@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useTranslation } from '../hooks/useTranslation';
 import { bulgarianCarService, BulgarianCar } from '../firebase';
+import { CAR_MAKES, YEARS_OPTIONS, PRICE_SUGGESTIONS } from '../constants/carMakes';
 
 // Styled Components
 const SellCarContainer = styled.div`
@@ -267,6 +268,36 @@ const SuccessMessage = styled.div`
   }
 `;
 
+// Comprehensive car makes list - Updated with complete list
+// const CAR_MAKES = [
+//   'Abarth', 'Acura', 'Alfa Romeo', 'Alpine', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Brilliance', 'Bugatti',
+//   'Buick', 'BYD', 'Cadillac', 'Changan', 'Chery', 'Chevrolet', 'Chrysler', 'Citroën', 'Cupra', 'Dacia',
+//   'Daewoo', 'Daihatsu', 'Dodge', 'Dongfeng', 'DS Automobiles', 'Exeed', 'Ferrari', 'Fiat', 'Fisker', 'Ford',
+//   'Forthing', 'GAZ', 'Geely', 'Genesis', 'GMC', 'Great Wall', 'Haval', 'Honda', 'Hongqi', 'Hummer',
+//   'Hyundai', 'Infiniti', 'Iran Khodro', 'Isuzu', 'Iveco', 'Jaguar', 'JAC', 'Jeep', 'Jetour', 'Kia',
+//   'Koenigsegg', 'Lada', 'Lamborghini', 'Lancia', 'Land Rover', 'Leapmotor', 'Lexus', 'Lincoln', 'Lotus', 'Lucid Motors',
+//   'MAN', 'Mahindra', 'Maserati', 'Maxus', 'Maybach', 'Mazda', 'McLaren', 'Mercedes-Benz', 'MG', 'Mini',
+//   'Mitsubishi', 'Moskvitch', 'NIO', 'Nissan', 'Opel', 'Pagani', 'Peugeot', 'Polestar', 'Pontiac', 'Porsche',
+//   'Praga', 'RAM', 'Renault', 'Rimac', 'Rinspeed', 'Rolls-Royce', 'Rover', 'Saab', 'Saipa', 'Scania',
+//   'SEAT', 'Seres', 'Sin Cars', 'Skoda', 'Smart', 'SsangYong', 'Subaru', 'Suzuki', 'Tata', 'Tesla',
+//   'Toyota', 'Tatra', 'TVR', 'UAZ', 'Volkswagen', 'Volvo', 'Voyah', 'Wiesmann', 'Xpeng', 'Zeekr'
+// ];
+
+// Generate years array from 1900 to 2025
+// const YEARS_OPTIONS = (() => {
+//   const years = [];
+//   for (let year = 2025; year >= 1900; year--) {
+//     years.push(year);
+//   }
+//   return years;
+// })();
+
+// Price suggestions for Bulgarian market
+// const PRICE_SUGGESTIONS = [
+//   1000, 2000, 3000, 5000, 7000, 10000, 15000, 20000, 25000, 30000,
+//   35000, 40000, 45000, 50000, 60000, 70000, 80000, 90000, 100000, 150000
+// ];
+
 // Sell Car Page Component
 const SellCarPage: React.FC = () => {
   const { t } = useTranslation();
@@ -503,14 +534,11 @@ const SellCarPage: React.FC = () => {
                   <label>{t('sellCar.make')} *</label>
                   <select name="make" value={formData.make} onChange={handleInputChange} required>
                     <option value="">{t('sellCar.selectMake')}</option>
-                    <option value="BMW">BMW</option>
-                    <option value="Mercedes-Benz">Mercedes-Benz</option>
-                    <option value="Audi">Audi</option>
-                    <option value="Volkswagen">Volkswagen</option>
-                    <option value="Toyota">Toyota</option>
-                    <option value="Honda">Honda</option>
-                    <option value="Ford">Ford</option>
-                    <option value="Opel">Opel</option>
+                    {CAR_MAKES.map((make) => (
+                      <option key={make} value={make}>
+                        {make}
+                      </option>
+                    ))}
                   </select>
                 </FormGroup>
 
@@ -528,16 +556,14 @@ const SellCarPage: React.FC = () => {
 
                 <FormGroup>
                   <label>{t('sellCar.year')} *</label>
-                  <input
-                    type="number"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleInputChange}
-                    placeholder="2020"
-                    min="1900"
-                    max={new Date().getFullYear() + 1}
-                    required
-                  />
+                  <select name="year" value={formData.year} onChange={handleInputChange} required>
+                    <option value="">{t('sellCar.selectYear')}</option>
+                    {YEARS_OPTIONS.map((year) => (
+                      <option key={year} value={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </select>
                 </FormGroup>
 
                 <FormGroup>
@@ -553,16 +579,26 @@ const SellCarPage: React.FC = () => {
                 </FormGroup>
 
                 <FormGroup>
-                  <label>{t('sellCar.price')} *</label>
-                  <input
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleInputChange}
-                    placeholder="25000"
-                    min="0"
-                    required
-                  />
+                  <label>{t('sellCar.price')} (€) *</label>
+                  <select name="price" value={formData.price} onChange={handleInputChange} required>
+                    <option value="">{t('sellCar.selectPrice')}</option>
+                    {PRICE_SUGGESTIONS.map((price) => (
+                      <option key={price} value={price}>
+                        €{price.toLocaleString()}
+                      </option>
+                    ))}
+                    <option value="custom">{t('sellCar.customPrice')}</option>
+                  </select>
+                  {formData.price === 'custom' && (
+                    <input
+                      type="number"
+                      name="customPrice"
+                      placeholder={t('sellCar.enterCustomPrice')}
+                      min="0"
+                      onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
+                      style={{ marginTop: '8px' }}
+                    />
+                  )}
                 </FormGroup>
 
                 <FormGroup>
@@ -574,6 +610,12 @@ const SellCarPage: React.FC = () => {
                     <option value="electric">{t('sellCar.fuelTypes.electric')}</option>
                     <option value="hybrid">{t('sellCar.fuelTypes.hybrid')}</option>
                     <option value="gas">{t('sellCar.fuelTypes.gas')}</option>
+                    <option value="lpg">{t('sellCar.fuelTypes.lpg')}</option>
+                    <option value="cng">{t('sellCar.fuelTypes.cng')}</option>
+                    <option value="hydrogen">{t('sellCar.fuelTypes.hydrogen')}</option>
+                    <option value="ethanol">{t('sellCar.fuelTypes.ethanol')}</option>
+                    <option value="biodiesel">{t('sellCar.fuelTypes.biodiesel')}</option>
+                    <option value="other">{t('sellCar.fuelTypes.other')}</option>
                   </select>
                 </FormGroup>
               </FormGrid>
