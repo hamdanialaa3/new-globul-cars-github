@@ -302,3 +302,8 @@ textarea:focus {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Bold text accessibility toggle */
+body.bold-text {
+  font-weight: 700;
+}

@@ -67,48 +67,7 @@ const NavLink = styled(Link)`
   }
 `;
 
-const UserMenu = styled.div`
-  position: relative;
-`;
-
-const UserButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: ${({ theme }) => theme.spacing.sm};
-  border-radius: ${({ theme }) => theme.borderRadius.base};
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.grey[100]};
-  }
-`;
-
-const UserAvatar = styled.img`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const UserName = styled.span`
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-`;
-
-const UserEmail = styled.span`
-  font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  color: ${({ theme }) => theme.colors.text.secondary};
-`;
+// Removed legacy user menu components to avoid duplication; user actions are now in Settings menu
 
 const DropdownMenu = styled.div<{ isOpen: boolean }>`
   position: absolute;
@@ -176,12 +135,40 @@ const LanguageButton = styled.button<{ active: boolean }>`
   }
 `;
 
+// Settings menu styles
+const SettingsMenu = styled.div`
+  position: relative;
+`;
+
+const SettingsButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  background: none;
+  border: 1px solid ${({ theme }) => theme.colors.grey[300]};
+  cursor: pointer;
+  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
+  border-radius: ${({ theme }) => theme.borderRadius.base};
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.grey[100]};
+  }
+`;
+
 // Header Component
 const Header: React.FC = () => {
   const { t, language, setLanguage } = useTranslation();
   const navigate = useNavigate();
   const [user, setUser] = useState<BulgarianUser | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isBoldText, setIsBoldText] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('bulgarian.boldText') === 'true';
+    }
+    return false;
+  });
 
   // Check authentication status
   React.useEffect(() => {
@@ -209,22 +196,27 @@ const Header: React.FC = () => {
     }
   };
 
-  // Toggle user menu
-  const toggleUserMenu = () => {
-    setIsUserMenuOpen(!isUserMenuOpen);
-  };
+  // Removed legacy toggleUserMenu, using settings menu instead
 
   // Close user menu when clicking outside
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isUserMenuOpen && !(event.target as Element).closest('.user-menu')) {
-        setIsUserMenuOpen(false);
-      }
+      const target = event.target as Element;
+      if (isUserMenuOpen && !target.closest('.user-menu')) setIsUserMenuOpen(false);
+      if (isSettingsOpen && !target.closest('.settings-menu')) setIsSettingsOpen(false);
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isUserMenuOpen]);
+  }, [isUserMenuOpen, isSettingsOpen]);
+
+  // Apply bold text preference
+  React.useEffect(() => {
+    document.body.classList.toggle('bold-text', isBoldText);
+    try {
+      localStorage.setItem('bulgarian.boldText', String(isBoldText));
+    } catch {}
+  }, [isBoldText]);
 
   return (
     <HeaderContainer>
@@ -240,82 +232,50 @@ const Header: React.FC = () => {
           <NavLink to="/cars">{t('nav.cars')}</NavLink>
           <NavLink to="/sell">{t('nav.sell')}</NavLink>
 
-          {/* Language Selector */}
-          <LanguageSelector>
-            <LanguageButton
-              active={language === 'bg'}
-              onClick={() => setLanguage('bg')}
-            >
-              БГ
-            </LanguageButton>
-            <LanguageButton
-              active={language === 'en'}
-              onClick={() => setLanguage('en')}
-            >
-              EN
-            </LanguageButton>
-          </LanguageSelector>
+          {/* Settings Menu: contains language, auth/profile, and text toggle */}
+          <SettingsMenu className="settings-menu">
+            <SettingsButton onClick={() => setIsSettingsOpen(!isSettingsOpen)} aria-haspopup="menu" aria-expanded={isSettingsOpen}>
+              ⚙️ <span>Settings</span>
+            </SettingsButton>
+            <DropdownMenu isOpen={isSettingsOpen}>
+              {/* Language controls (moved, not duplicated) */}
+              <div style={{ padding: '12px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+                <div style={{ marginBottom: '8px', fontSize: '0.9rem', opacity: 0.8 }}>Language</div>
+                <LanguageSelector>
+                  <LanguageButton active={language === 'bg'} onClick={() => setLanguage('bg')}>БГ</LanguageButton>
+                  <LanguageButton active={language === 'en'} onClick={() => setLanguage('en')}>EN</LanguageButton>
+                </LanguageSelector>
+              </div>
 
-          {/* User Menu */}
-          {user ? (
-            <UserMenu className="user-menu">
-              <UserButton onClick={toggleUserMenu}>
-                {user.photoURL ? (
-                  <UserAvatar src={user.photoURL} alt={user.displayName} />
-                ) : (
-                  <div
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      backgroundColor: '#00966B',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    {user.displayName.charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <UserInfo>
-                  <UserName>{user.displayName}</UserName>
-                  <UserEmail>{user.email}</UserEmail>
-                </UserInfo>
-              </UserButton>
+              {/* Auth/Profile controls */}
+              {user ? (
+                <>
+                  <DropdownItem onClick={() => { navigate('/dashboard'); setIsSettingsOpen(false); }}>
+                    👤 Dashboard
+                  </DropdownItem>
+                  <DropdownItem onClick={() => { handleLogout(); setIsSettingsOpen(false); }} className="danger">
+                    ↩️ {t('nav.logout')}
+                  </DropdownItem>
+                </>
+              ) : (
+                <>
+                  <DropdownItem onClick={() => { navigate('/login'); setIsSettingsOpen(false); }}>
+                    🔑 {t('nav.login')}
+                  </DropdownItem>
+                  <DropdownItem onClick={() => { navigate('/register'); setIsSettingsOpen(false); }}>
+                    ➕ {t('nav.register')}
+                  </DropdownItem>
+                </>
+              )}
 
-              <DropdownMenu isOpen={isUserMenuOpen}>
-                <DropdownItem onClick={() => navigate('/dashboard')}>
-                  {t('nav.dashboard')}
-                </DropdownItem>
-                <DropdownItem onClick={() => navigate('/cars?owner=' + user.uid)}>
-                  {t('nav.myCars')}
-                </DropdownItem>
-                <DropdownItem onClick={() => navigate('/messages')}>
-                  {t('nav.messages')}
-                </DropdownItem>
-                <DropdownItem onClick={() => navigate('/favorites')}>
-                  {t('nav.favorites')}
-                </DropdownItem>
-                <DropdownItem onClick={() => navigate('/settings')}>
-                  {t('nav.settings')}
-                </DropdownItem>
-                <DropdownItem className="danger" onClick={handleLogout}>
-                  {t('nav.logout')}
-                </DropdownItem>
-              </DropdownMenu>
-            </UserMenu>
-          ) : (
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <NavLink to="/login">{t('nav.login')}</NavLink>
-              <NavLink to="/register" className="active">
-                {t('nav.register')}
-              </NavLink>
-            </div>
-          )}
+              {/* Bold text toggle */}
+              <DropdownItem onClick={() => setIsBoldText(!isBoldText)}>
+                {isBoldText ? '🔓 Disable bold text' : '🔒 Enable bold text'}
+              </DropdownItem>
+            </DropdownMenu>
+          </SettingsMenu>
 
-          {/* Notification Bell */}
+          {/* Notification Bell remains available */}
           {user && <NotificationBell />}
         </Navigation>
       </HeaderContent>

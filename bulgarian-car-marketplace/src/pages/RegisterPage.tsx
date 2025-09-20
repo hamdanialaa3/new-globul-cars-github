@@ -26,12 +26,12 @@ const RegisterContent = styled.div`
 `;
 
 const RegisterCard = styled.div`
-  background: ${({ theme }) => theme.colors.background.paper};
+  background: ${({ theme }) => theme.colors.background.paper}E6;
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   padding: ${({ theme }) => theme.spacing['3xl']};
   box-shadow: ${({ theme }) => theme.shadows.xl};
   width: 100%;
-  max-width: 450px;
+  max-width: 608px;
   position: relative;
   overflow: hidden;
 

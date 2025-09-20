@@ -24,15 +24,15 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "craco start",
     "start:stable": "npm run build && node server.js",
     "start:server": "node server.js",
     "start:enhanced": "npm run build && node server-enhanced.js",
     "start:python": "npm run build && python python-server.py",
     "start:simple": "npm run build && node simple-server.js",
     "serve:static": "npm run build && npx serve -s build -l 3003",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject",
     "deploy": "npm run build && firebase deploy --only hosting",
     "deploy:hosting": "firebase deploy --only hosting",
@@ -47,6 +47,8 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "babel-plugin-styled-components": "^2.1.4",
     "firebase-tools": "^13.0.0"
   },
   "browserslist": {
