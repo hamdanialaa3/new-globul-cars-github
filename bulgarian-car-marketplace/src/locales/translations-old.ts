@@ -24,40 +24,7 @@ export const translations = {
     // Home Page
     home: {
       hero: {
-        title: 'Откр    // Search
-    search: {
-      advanced: {
-        title: 'Advanced Search'
-      }
-    },
-
-    // Login
-    login: {
-      title: 'Вход в акаунта',
-      subtitle: 'Влезте в своя акаунт за да продължите',
-      email: 'Имейл адрес',
-      emailPlaceholder: 'Въведете вашия имейл',
-      password: 'Парола',
-      passwordPlaceholder: 'Въведете вашата парола',
-      signIn: 'Вход',
-      signingIn: 'Влизане...',
-      or: 'или',
-      continueWithGoogle: 'Продължи с Google',
-      continueWithFacebook: 'Продължи с Facebook',
-      forgotPassword: 'Забравена парола?',
-      createAccount: 'Създай акаунт',
-      emailRequired: 'Имейл адресът е задължителен',
-      emailInvalid: 'Невалиден имейл адрес',
-      passwordRequired: 'Паролата е задължителна',
-      passwordTooShort: 'Паролата трябва да бъде поне 6 символа',
-      userNotFound: 'Потребителят не е намерен',
-      wrongPassword: 'Грешна парола',
-      tooManyRequests: 'Твърде много опити. Опитайте по-късно',
-      generalError: 'Възникна грешка при влизането',
-      googleLoginError: 'Грешка при влизане с Google',
-      facebookLoginError: 'Грешка при влизане с Facebook'
-    }
-  },ята мечтана кола в България',
+        title: 'Открийте вашата мечтана кола в България',
         subtitle: 'Над 15,000 проверени автомобила от доверени дилъри. Намерете перфектната кола за вас с нашата интелигентна система за търсене.',
         browseCars: 'Разгледай коли',
         sellCar: 'Продай колата си'

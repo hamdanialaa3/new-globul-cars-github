@@ -1,14 +1,10 @@
 // Google Speech-to-Text & Text-to-Speech Integration
 
-import { SpeechClient } from '@google-cloud/speech';
-import { TextToSpeechClient } from '@google-cloud/text-to-speech';
+import { speechClient, ttsClient } from './firebase-config';
 
 export class BulgarianSpeechService {
-  private readonly speechClient = new SpeechClient();
-  private readonly ttsClient = new TextToSpeechClient();
-
   async speechToText(audioFile: string, languageCode: string = 'bg-BG') {
-    const [response] = await this.speechClient.recognize({
+    const [response] = await speechClient.recognize({
       audio: { content: audioFile },
       config: { languageCode },
     });
@@ -16,7 +12,7 @@ export class BulgarianSpeechService {
   }
 
   async textToSpeech(text: string, languageCode: string = 'bg-BG') {
-    const [response] = await this.ttsClient.synthesizeSpeech({
+    const [response] = await ttsClient.synthesizeSpeech({
       input: { text },
       voice: { languageCode },
       audioConfig: { audioEncoding: 'MP3' },

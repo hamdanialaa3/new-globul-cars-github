@@ -8,15 +8,28 @@ import { getStorage, FirebaseStorage, connectStorageEmulator } from 'firebase/st
 import { getFunctions, Functions, connectFunctionsEmulator } from 'firebase/functions';
 import { getAnalytics, Analytics } from 'firebase/analytics';
 
+// Google Cloud Services Imports
+import { BigQuery } from '@google-cloud/bigquery';
+import { SessionsClient } from '@google-cloud/dialogflow';
+import { Loader } from '@googlemaps/js-api-loader';
+import { ImageAnnotatorClient } from '@google-cloud/vision';
+import { SpeechClient } from '@google-cloud/speech';
+import { TextToSpeechClient } from '@google-cloud/text-to-speech';
+import { v2 as Translate } from '@google-cloud/translate';
+import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
+import { KeyManagementServiceClient } from '@google-cloud/kms';
+import { PubSub } from '@google-cloud/pubsub';
+import { CloudTasksClient } from '@google-cloud/tasks';
+
 // Firebase configuration for Bulgarian Car Marketplace
 const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY || "your-api-key",
-  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || "globul-cars.firebaseapp.com",
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID || "globul-cars",
-  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || "globul-cars.appspot.com",
-  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-  appId: process.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abcdef123456",
-  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID || "G-ABCDEFGHIJ"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "your-api-key",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "globul-cars.firebaseapp.com",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "globul-cars",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "globul-cars.appspot.com",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "123456789",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:123456789:web:abcdef123456",
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-ABCDEFGHIJ"
 };
 
 // Bulgarian localization settings
@@ -40,12 +53,48 @@ export const storage: FirebaseStorage = getStorage(app);
 export const functions: Functions = getFunctions(app);
 
 // Analytics (only in production and browser)
-let analytics: Analytics | undefined;
-if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
-  analytics = getAnalytics(app);
-}
+const analytics: Analytics | undefined = (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') ? getAnalytics(app) : undefined;
 
 export { analytics };
+
+// Initialize Google Cloud Services
+const projectId = process.env.GCLOUD_PROJECT_ID || 'your-gcp-project-id';
+
+// BigQuery
+export const bigquery = new BigQuery({ projectId });
+
+// Dialogflow
+export const dialogflowClient = new SessionsClient();
+
+// Google Maps
+const mapsApiKey = process.env.GOOGLE_MAPS_API_KEY || 'your-google-maps-api-key';
+export const mapsLoader = new Loader({
+  apiKey: mapsApiKey,
+  version: 'weekly',
+  libraries: ['places']
+});
+
+// Vision AI
+export const visionClient = new ImageAnnotatorClient();
+
+// Speech Services
+export const speechClient = new SpeechClient();
+export const ttsClient = new TextToSpeechClient();
+
+// Translation
+export const translateClient = new Translate.Translate({ projectId });
+
+// Recaptcha
+export const recaptchaClient = new RecaptchaEnterpriseServiceClient();
+
+// KMS
+export const kmsClient = new KeyManagementServiceClient();
+
+// Pub/Sub
+export const pubsubClient = new PubSub({ projectId });
+
+// Cloud Tasks
+export const cloudTasksClient: CloudTasksClient = new CloudTasksClient();
 
 // Bulgarian Firebase Utilities Class
 export class BulgarianFirebaseUtils {
@@ -159,8 +208,8 @@ export class BulgarianFirebaseUtils {
         connectFunctionsEmulator(functions, 'localhost', 5001);
 
         console.log('🔥 Firebase emulators initialized for Bulgarian Car Marketplace');
-      } catch (error) {
-        console.warn('Firebase emulators already initialized or not available');
+      } catch (error: any) {
+        console.warn('Firebase emulators already initialized or not available:', error.message);
       }
     }
   }

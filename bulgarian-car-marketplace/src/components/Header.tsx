@@ -69,7 +69,7 @@ const NavLink = styled(Link)`
 
 // Removed legacy user menu components to avoid duplication; user actions are now in Settings menu
 
-const DropdownMenu = styled.div<{ isOpen: boolean }>`
+const DropdownMenu = styled.div<{ $isOpen: boolean }>`
   position: absolute;
   top: 100%;
   right: 0;
@@ -78,9 +78,9 @@ const DropdownMenu = styled.div<{ isOpen: boolean }>`
   border-radius: ${({ theme }) => theme.borderRadius.md};
   box-shadow: ${({ theme }) => theme.shadows.lg};
   min-width: 200px;
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transform: translateY(${({ isOpen }) => (isOpen ? '0' : '-10px')});
+  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
+  visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
+  transform: translateY(${({ $isOpen }) => ($isOpen ? '0' : '-10px')});
   transition: all 0.2s ease-in-out;
   z-index: 1000;
 `;
@@ -119,19 +119,19 @@ const LanguageSelector = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
 `;
 
-const LanguageButton = styled.button<{ active: boolean }>`
+const LanguageButton = styled.button<{ $active: boolean }>`
   padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
-  background: ${({ theme, active }) => active ? theme.colors.primary.main : 'transparent'};
-  color: ${({ theme, active }) => active ? theme.colors.primary.contrastText : theme.colors.text.primary};
-  border: 1px solid ${({ theme, active }) => active ? theme.colors.primary.main : theme.colors.grey[300]};
+  background: ${({ theme, $active }) => $active ? theme.colors.primary.main : 'transparent'};
+  color: ${({ theme, $active }) => $active ? theme.colors.primary.contrastText : theme.colors.text.primary};
+  border: 1px solid ${({ theme, $active }) => $active ? theme.colors.primary.main : theme.colors.grey[300]};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   font-size: ${({ theme }) => theme.typography.fontSize.sm};
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    background: ${({ theme, active }) => active ? theme.colors.primary.dark : theme.colors.grey[100]};
-    border-color: ${({ theme, active }) => active ? theme.colors.primary.dark : theme.colors.grey[400]};
+    background: ${({ theme, $active }) => $active ? theme.colors.primary.dark : theme.colors.grey[100]};
+    border-color: ${({ theme, $active }) => $active ? theme.colors.primary.dark : theme.colors.grey[400]};
   }
 `;
 
@@ -237,13 +237,13 @@ const Header: React.FC = () => {
             <SettingsButton onClick={() => setIsSettingsOpen(!isSettingsOpen)} aria-haspopup="menu" aria-expanded={isSettingsOpen}>
               ⚙️ <span>Settings</span>
             </SettingsButton>
-            <DropdownMenu isOpen={isSettingsOpen}>
+            <DropdownMenu $isOpen={isSettingsOpen}>
               {/* Language controls (moved, not duplicated) */}
               <div style={{ padding: '12px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                 <div style={{ marginBottom: '8px', fontSize: '0.9rem', opacity: 0.8 }}>Language</div>
                 <LanguageSelector>
-                  <LanguageButton active={language === 'bg'} onClick={() => setLanguage('bg')}>БГ</LanguageButton>
-                  <LanguageButton active={language === 'en'} onClick={() => setLanguage('en')}>EN</LanguageButton>
+                  <LanguageButton $active={language === 'bg'} onClick={() => setLanguage('bg')}>БГ</LanguageButton>
+                  <LanguageButton $active={language === 'en'} onClick={() => setLanguage('en')}>EN</LanguageButton>
                 </LanguageSelector>
               </div>
 

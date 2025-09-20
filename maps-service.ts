@@ -4,22 +4,13 @@
 
 /// <reference types="@types/google.maps" />
 
-import { Loader } from '@googlemaps/js-api-loader';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from './firebase-config';
-
-const apiKey = process.env.GOOGLE_MAPS_API_KEY || 'your-google-maps-api-key';
-
-const loader = new Loader({
-  apiKey,
-  version: 'weekly',
-  libraries: ['places']
-});
+import { db, mapsLoader } from './firebase-config';
 
 export class BulgarianMapsService {
   // Load map library
   async loadMap(elementId: string, options: google.maps.MapOptions): Promise<google.maps.Map> {
-    const google = await loader.load();
+    const google = await mapsLoader.load();
     const mapElement = document.getElementById(elementId) as HTMLElement;
     const map = new google.maps.Map(mapElement, options);
     return map;

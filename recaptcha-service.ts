@@ -1,8 +1,6 @@
 // Google Recaptcha Enterprise Integration for Bulgarian Car Marketplace
 
-import { RecaptchaEnterpriseServiceClient } from '@google-cloud/recaptcha-enterprise';
-
-const client = new RecaptchaEnterpriseServiceClient();
+import { recaptchaClient } from './firebase-config';
 
 export class BulgarianRecaptchaService {
   // Assess Recaptcha token
@@ -16,7 +14,7 @@ export class BulgarianRecaptchaService {
       },
       parent: `projects/${projectId}`,
     };
-    const [response] = await client.createAssessment(request);
+    const [response] = await recaptchaClient.createAssessment(request);
     return response;
   }
 }

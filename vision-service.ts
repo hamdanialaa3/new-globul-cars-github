@@ -1,13 +1,11 @@
 // Google Vision AI Integration for Bulgarian Car Marketplace
 
-import { ImageAnnotatorClient } from '@google-cloud/vision';
-
-const client = new ImageAnnotatorClient();
+import { visionClient } from './firebase-config';
 
 export class BulgarianVisionService {
   // Analyze car image (text detection, license plates, etc)
   async analyzeImage(imagePath: string): Promise<any> {
-    const [result] = await client.textDetection(imagePath);
+    const [result] = await visionClient.textDetection(imagePath);
     return result;
   }
 }

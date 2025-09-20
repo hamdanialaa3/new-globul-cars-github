@@ -1,10 +1,7 @@
 // Google BigQuery Integration for Bulgarian Car Marketplace
 // Big data analytics and advanced reporting service
 
-import { BigQuery } from '@google-cloud/bigquery';
-
-const projectId = process.env.GCLOUD_PROJECT_ID || 'your-gcp-project-id';
-const bigquery = new BigQuery({ projectId });
+import { bigquery } from './firebase-config';
 
 export class BulgarianBigQueryService {
   // Execute SQL query on BigQuery

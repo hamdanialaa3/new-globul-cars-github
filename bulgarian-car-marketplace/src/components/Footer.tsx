@@ -101,7 +101,7 @@ const FooterBottom = styled.div`
   color: ${({ theme }) => theme.colors.grey[500]};
 `;
 
-const Copyright = styled.p`
+const Copyright = styled.div`
   margin: 0 0 ${({ theme }) => theme.spacing.sm} 0;
 `;
 

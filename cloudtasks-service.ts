@@ -1,8 +1,6 @@
 // Google Cloud Tasks Integration for Bulgarian Car Marketplace
 
-import { CloudTasksClient } from '@google-cloud/tasks';
-
-const client = new CloudTasksClient();
+import { cloudTasksClient } from './firebase-config';
 
 export class BulgarianCloudTasksService {
   // Create new task
@@ -13,17 +11,17 @@ export class BulgarianCloudTasksService {
     url: string,
     payload: any
   }): Promise<any> {
-    const parent = client.queuePath(project, location, queue);
+    const parent = cloudTasksClient.queuePath(project, location, queue);
     const task = {
       httpRequest: {
-  httpMethod: 'POST' as const,
+        httpMethod: 'POST' as const,
         url,
         body: Buffer.from(JSON.stringify(payload)).toString('base64'),
         headers: { 'Content-Type': 'application/json' },
       },
     };
-  const [response] = await client.createTask({ parent, task });
-  return response;
+    const [response] = await cloudTasksClient.createTask({ parent, task });
+    return response;
   }
 }
 

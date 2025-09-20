@@ -3,17 +3,27 @@
 // قائمة شاملة لماركات السيارات لسوق السيارات البلغاري
 
 export const CAR_MAKES = [
-  'Abarth', 'Acura', 'Alfa Romeo', 'Alpine', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Brilliance', 'Bugatti',
-  'Buick', 'BYD', 'Cadillac', 'Changan', 'Chery', 'Chevrolet', 'Chrysler', 'Citroën', 'Cupra', 'Dacia',
-  'Daewoo', 'Daihatsu', 'Dodge', 'Dongfeng', 'DS Automobiles', 'Exeed', 'Ferrari', 'Fiat', 'Fisker', 'Ford',
-  'Forthing', 'GAZ', 'Geely', 'Genesis', 'GMC', 'Great Wall', 'Haval', 'Honda', 'Hongqi', 'Hummer',
-  'Hyundai', 'Infiniti', 'Iran Khodro', 'Isuzu', 'Iveco', 'Jaguar', 'JAC', 'Jeep', 'Jetour', 'Kia',
-  'Koenigsegg', 'Lada', 'Lamborghini', 'Lancia', 'Land Rover', 'Leapmotor', 'Lexus', 'Lincoln', 'Lotus', 'Lucid Motors',
-  'MAN', 'Mahindra', 'Maserati', 'Maxus', 'Maybach', 'Mazda', 'McLaren', 'Mercedes-Benz', 'MG', 'Mini',
-  'Mitsubishi', 'Moskvitch', 'NIO', 'Nissan', 'Opel', 'Pagani', 'Peugeot', 'Polestar', 'Pontiac', 'Porsche',
-  'Praga', 'RAM', 'Renault', 'Rimac', 'Rinspeed', 'Rolls-Royce', 'Rover', 'Saab', 'Saipa', 'Scania',
-  'SEAT', 'Seres', 'Sin Cars', 'Skoda', 'Smart', 'SsangYong', 'Subaru', 'Suzuki', 'Tata', 'Tesla',
-  'Toyota', 'Tatra', 'TVR', 'UAZ', 'Volkswagen', 'Volvo', 'Voyah', 'Wiesmann', 'Xpeng', 'Zeekr'
+  'ABT', 'AC Schnitzer', 'Abarth', 'Acura', 'Alfa Romeo', 'Alpina', 'Alpine', 'Apex', 'Arrinera', 'Artega',
+  'Ascari', 'Aston Martin', 'Audi', 'BAC', 'BAIC', 'Bentley', 'Bertone', 'BMW', 'Borgward', 'Brabham',
+  'Brabus', 'Breckland', 'Brilliance', 'Bugatti', 'Buick', 'BYD', 'Cadillac', 'Caparo', 'Carlsson', 'Caterham',
+  'Changan', 'Chery', 'Chevrolet', 'Chrysler', 'Citroën', 'Covini', 'Cupra', 'Czinger', 'Dacia', 'Daewoo',
+  'Daihatsu', 'Daimler', 'Datsun', 'De Tomaso', 'Devon', 'Dodge', 'Donkervoort', 'Dongfeng', 'DS Automobiles', 'EDAG',
+  'Edo', 'Elfin', 'Eterniti', 'Exeed', 'FM Auto', 'FPV', 'Farbio', 'Ferrari', 'Fiat', 'Fisker', 'Ford',
+  'Forthing', 'GAZ', 'Geely', 'Genesis', 'GMC', 'Gordon Murray', 'Great Wall', 'GTA', 'Gumpert', 'Haval',
+  'Hamann', 'Hennessey', 'Holden', 'Honda', 'Hongqi', 'HSV', 'Hummer', 'Hyundai', 'Icona', 'Infiniti',
+  'Iran Khodro', 'Isuzu', 'Italdesign', 'Iveco', 'JAC', 'Jaguar', 'Jeep', 'Jetour', 'KTM', 'Karma',
+  'Kia', 'Kleemann', 'Koenigsegg', 'LCC', 'Lada', 'Lamborghini', 'Lancia', 'Land Rover', 'Larte', 'Leapmotor',
+  'Leblanc', 'Lexus', 'Lincoln', 'Lobini', 'Loremo', 'Lotus', 'Lucid Motors', 'Lynk Co', 'MAN', 'Mahindra',
+  'Mansory', 'Marcos', 'Maserati', 'Maxus', 'Maybach', 'Mazda', 'Mazel', 'McLaren', 'Mercedes-Benz', 'Mercury',
+  'MG', 'Mindset', 'Mini', 'Mitsubishi', 'Mitsuoka', 'Morgan', 'Moskvitch', 'NanoFlowcell', 'Nilu', 'NIO',
+  'Nismo', 'Nissan', 'Noble', 'Oldsmobile', 'Opel', 'ORCA', 'Pagani', 'Panoz', 'Peugeot', 'PGO',
+  'Pininfarina', 'Plymouth', 'Polestar', 'Pontiac', 'Porsche', 'Praga', 'Proton', 'Qoros', 'RAM', 'Renault',
+  'Rimac', 'Rinspeed', 'Rivian', 'Rolls-Royce', 'Rover', 'Saab', 'Saipa', 'Saleen', 'Saturn', 'Scania',
+  'Scion', 'Scout', 'SEAT', 'Seres', 'Sin Cars', 'Singer', 'Skoda', 'Slate', 'Smart', 'Sony',
+  'Spada', 'Spyker', 'SsangYong', 'Startech', 'Stola', 'Strosek', 'StudioTorino', 'Subaru', 'Suzuki', 'Tata',
+  'Tatra', 'TechArt', 'Tesla', 'Think', 'Touring', 'Toyota', 'Tramontana', 'TVR', 'TWR', 'UAZ',
+  'Valmet', 'Vauxhall', 'Venturi', 'VinFast', 'Volkswagen', 'Volvo', 'Voyah', 'Vuhl', 'Wald', 'Wiesmann',
+  'Xpeng', 'Yes', 'Zagato', 'Zeekr', 'Zenvo'
 ];
 
 // Generate years array from 1900 to 2025

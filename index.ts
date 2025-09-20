@@ -11,7 +11,19 @@ export {
   functions, 
   analytics,
   BULGARIAN_CONFIG,
-  BulgarianFirebaseUtils 
+  BulgarianFirebaseUtils,
+  // Google Cloud Services
+  bigquery,
+  dialogflowClient,
+  mapsLoader,
+  visionClient,
+  speechClient,
+  ttsClient,
+  translateClient,
+  recaptchaClient,
+  kmsClient,
+  pubsubClient,
+  cloudTasksClient
 } from './firebase-config';
 
 // Authentication Service
@@ -22,20 +34,45 @@ export {
 } from './auth-service';
 export type { BulgarianUser } from './auth-service';
 
-// Messaging Service
-export * from './messaging-service';
-export { 
-  bulgarianMessaging,
-  BulgarianMessagingService 
-} from './messaging-service';
-export type { 
-  CarMessage, 
-  ChatRoom, 
-  MessageNotification,
-  MessageFilters,
-  MessageStats,
-  MessageAttachment
-} from './messaging-service';
+// BigQuery Service
+export * from './bigquery-service';
+export { BulgarianBigQueryService } from './bigquery-service';
+
+// Dialogflow Service
+export * from './dialogflow-service';
+export { BulgarianDialogflowService } from './dialogflow-service';
+
+// Maps Service
+export * from './maps-service';
+export { BulgarianMapsService } from './maps-service';
+
+// Vision Service
+export * from './vision-service';
+export { BulgarianVisionService } from './vision-service';
+
+// Speech Service
+export * from './speech-service';
+export { BulgarianSpeechService } from './speech-service';
+
+// Translation Service
+export * from './translation-service';
+export { BulgarianTranslationService } from './translation-service';
+
+// Recaptcha Service
+export * from './recaptcha-service';
+export { BulgarianRecaptchaService } from './recaptcha-service';
+
+// KMS Service
+export * from './kms-service';
+export { BulgarianKMSService } from './kms-service';
+
+// Pub/Sub Service
+export * from './pubsub-service';
+export { BulgarianPubSubService } from './pubsub-service';
+
+// Cloud Tasks Service
+export * from './cloudtasks-service';
+export { BulgarianCloudTasksService } from './cloudtasks-service';
 
 // Re-export Firebase SDK for convenience
 export {
